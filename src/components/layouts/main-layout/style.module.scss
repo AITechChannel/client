@@ -1,0 +1,18 @@
+.body {
+  display: flex;
+}
+
+.content {
+  height: calc(100vh - 70px);
+  flex: 1;
+  transition: all ease 0.3s;
+}
+
+.content-dark {
+  background-color: rgb(48, 48, 48);
+  color: white;
+}
+
+.content-ligt {
+  background-color: white;
+}

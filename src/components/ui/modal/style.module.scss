@@ -1,0 +1,39 @@
+.modal-wrapper {
+  position: fixed;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  background: rgb(0, 0, 0, 0.1);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  .modal {
+    height: 500px;
+    width: 500px;
+    border-radius: 10px;
+    background: white;
+    padding: 10px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+
+    .header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .icon-close {
+      &:hover {
+        cursor: pointer;
+      }
+    }
+
+    .footer {
+      display: flex;
+      justify-content: flex-end;
+    }
+  }
+}

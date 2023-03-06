@@ -1,0 +1,40 @@
+.switch-wrapper {
+  background-color: #eeee;
+  width: 50px;
+  padding: 2px;
+  border-radius: 14px;
+  // border: 1px solid #ededed;
+  transition: background-color ease-in-out 0.3s;
+
+  &:hover {
+    cursor: pointer;
+  }
+  .dot {
+    height: 24px;
+    width: 24px;
+    border-radius: 99px;
+    background-color: red;
+    margin-right: 20px;
+    transition: margin ease-in-out 0.3s;
+  }
+  .dot.active {
+    margin-right: 0;
+    margin-left: 20px;
+  }
+
+  .icon {
+    height: 24px;
+    width: 24px;
+    border-radius: 99px;
+    margin-right: 20px;
+    transition: margin ease-in-out 0.3s;
+  }
+  .icon.active {
+    margin-right: 0;
+    margin-left: 20px;
+  }
+}
+
+.switch-wrapper.active {
+  background-color: rgb(77, 95, 77);
+}
