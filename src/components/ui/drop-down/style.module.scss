@@ -2,9 +2,26 @@
   background: rgb(209, 194, 194);
   border-radius: 10px;
   display: inline-block;
-  padding: 0 10px;
 
   .item {
-    padding: 4px 20px 4px 4px;
+    padding: 4px 18px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    &:last-child {
+      border-bottom-right-radius: 10px;
+      border-bottom-left-radius: 10px;
+    }
+    &:first-child {
+      border-top-right-radius: 10px;
+      border-top-left-radius: 10px;
+    }
+    span {
+      margin-right: 20px;
+    }
+    &:hover {
+      cursor: pointer;
+      background-color: aqua;
+    }
   }
 }

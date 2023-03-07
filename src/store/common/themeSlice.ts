@@ -17,12 +17,7 @@ export const themeSlice = createSlice({
   initialState,
   reducers: {
     toggleTheme: (state) => {
-      console.log("sdfsd");
-      if (state.value === "DARK") {
-        state.value = "LIGHT";
-      } else {
-        state.value = "DARK";
-      }
+      state.value === "DARK" ? (state.value = "LIGHT") : (state.value = "DARK");
     }
   }
 });
