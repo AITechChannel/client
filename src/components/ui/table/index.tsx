@@ -3,6 +3,7 @@ import { PropsType } from './interface';
 
 function Table(props: PropsType) {
   const { columns, data } = props;
+
   const mapData = (data: any[]) => {
     return data.map((_item: any) =>
       columns.map((_column: any) => {
@@ -14,6 +15,7 @@ function Table(props: PropsType) {
       })
     );
   };
+
   return (
     <div>
       <table>
@@ -23,7 +25,7 @@ function Table(props: PropsType) {
               <th
                 style={{
                   width: _column.width,
-                  textAlign: _column.align || 'left'
+                  textAlign: 'left'
                 }}
                 key={_column.key}
               >

@@ -1,7 +1,7 @@
 import React from 'react';
 
 function Create() {
-  return <div>Cerate Note</div>;
+  return <div></div>;
 }
 
 export default Create;

@@ -1,14 +1,14 @@
-import { ReactNode } from 'react';
+import { ReactElement, ReactNode } from 'react';
 export interface PropsType {
-  columns: Array<ColumnsType>;
+  columns: ColumnsType[];
   data: any[];
 }
 
-type ColumnsType = {
+export interface ColumnsType {
   name?: string;
   width?: number | string | undefined;
-  render?: () => ReactNode;
-  align?: 'left' | 'right' | 'center';
+  render?: Function;
+  align?: string;
   dataIndex?: string;
   key?: string | number;
-};
+}

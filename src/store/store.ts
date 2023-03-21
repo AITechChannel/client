@@ -1,14 +1,24 @@
-import themeSlice from "./common/themeSlice";
-import { configureStore } from "@reduxjs/toolkit";
-import dashboardSlice from "../features/dashboard/redux/slice";
-import { TypedUseSelectorHook, useDispatch, useSelector } from "react-redux";
+import themeSlice from './common/themeSlice';
+import { configureStore } from '@reduxjs/toolkit';
+import dashboardSlice from '../features/dashboard/redux/slice';
+import { TypedUseSelectorHook, useDispatch, useSelector } from 'react-redux';
+import createSagaMiddleware from 'redux-saga';
+import myNoteSlice from '@/features/my-note/redux/slice';
+import { rootSaga } from './rootSaga';
+
+const sagaMiddleware = createSagaMiddleware();
 
 export const store = configureStore({
   reducer: {
     dashboard: dashboardSlice,
-    theme: themeSlice
-  }
+    theme: themeSlice,
+    myNote: myNoteSlice
+  },
+  middleware: (getDefaultMiddleware) =>
+    getDefaultMiddleware().concat(sagaMiddleware)
 });
+
+sagaMiddleware.run(rootSaga);
 
 export type RootState = ReturnType<typeof store.getState>;
 export type AppDispatch = typeof store.dispatch;

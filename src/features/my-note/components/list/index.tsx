@@ -1,5 +1,4 @@
 import Table from '@/components/ui/table';
-import React from 'react';
 
 function List() {
   const columns = [
@@ -9,17 +8,17 @@ function List() {
       key: 'name',
       width: 300,
       align: 'left'
+    },
+    {
+      name: 'Age',
+      dataIndex: 'age',
+      key: 'age',
+      width: 300,
+      render: (data: any) => {
+        return <button>{data.age}</button>;
+      },
+      align: 'left'
     }
-    // {
-    //   name: 'Age',
-    //   dataIndex: 'age',
-    //   key: 'age',
-    //   width: 300,
-    //   render: (data: any) => {
-    //     return <button>{data.age}</button>;
-    //   },
-    //   align: 'left'
-    // }
   ];
 
   const data = [
@@ -38,7 +37,11 @@ function List() {
       // tags: ['loser']
     }
   ];
-  return <div>{/* <Table columns={columns} data={data} /> */}</div>;
+  return (
+    <div>
+      <Table columns={columns} data={data} />
+    </div>
+  );
 }
 
 export default List;
