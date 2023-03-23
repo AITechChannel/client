@@ -1,35 +1,42 @@
 import { createSlice } from '@reduxjs/toolkit';
-import type { PayloadAction } from '@reduxjs/toolkit';
 import type { RootState } from '../../../store/store';
 
 interface CounterState {
-  value: number;
-  todos: any[];
+  loading: { noteList: boolean };
+  noteList: {
+    id: number;
+    title: string;
+    content: string;
+  }[];
 }
 
 const initialState: CounterState = {
-  value: 0,
-  todos: []
+  loading: { noteList: false },
+  noteList: []
 };
 
 export const myNoteSlice = createSlice({
   name: 'myNote',
   initialState,
   reducers: {
-    increment: (state) => {
-      state.value += 1;
+    fetchNoteList: (state, action) => {
+      state.loading.noteList = true;
+
+      console.log(action);
     },
-    decrement: (state) => {
-      state.value -= 1;
+    fetchNoteSuccess: (state, action) => {
+      state.loading.noteList = false;
+      state.noteList = action.payload;
     },
-    incrementByAmount: (state, action: PayloadAction<number>) => {
-      state.value += action.payload;
+    fetchNoteFailure: (state, action) => {
+      state.loading.noteList = false;
     }
   }
 });
 
-export const { increment, decrement, incrementByAmount } = myNoteSlice.actions;
+export const { fetchNoteList, fetchNoteSuccess, fetchNoteFailure } =
+  myNoteSlice.actions;
 
-export const count = (state: RootState) => state.myNote.value;
+export const noteList = (state: RootState) => state.myNote.noteList;
 
 export default myNoteSlice.reducer;

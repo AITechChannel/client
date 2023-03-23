@@ -1,18 +1,20 @@
 import Table from '@/components/ui/table';
+import useNote from '../../hooks/useNote';
 
 function List() {
+  const { fetchNoteList, listNote } = useNote();
   const columns = [
     {
-      name: 'Name',
-      dataIndex: 'name',
-      key: 'name',
+      name: 'Title',
+      dataIndex: 'title',
+      key: 'title',
       width: 300,
       align: 'left'
     },
     {
-      name: 'Age',
-      dataIndex: 'age',
-      key: 'age',
+      name: 'Content',
+      dataIndex: 'content',
+      key: 'content',
       width: 300,
       render: (data: any) => {
         return <button>{data.age}</button>;
@@ -21,25 +23,9 @@ function List() {
     }
   ];
 
-  const data = [
-    {
-      key: '1',
-      name: 'John Brown',
-      age: 32,
-      address: 'New York No. 1 Lake Park'
-      // tags: ['nice', 'developer']
-    },
-    {
-      key: '2',
-      name: 'Jim Green',
-      age: 42,
-      address: 'London No. 1 Lake Park'
-      // tags: ['loser']
-    }
-  ];
   return (
     <div>
-      <Table columns={columns} data={data} />
+      <Table columns={columns} data={listNote} />
     </div>
   );
 }

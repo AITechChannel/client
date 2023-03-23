@@ -1,35 +1,25 @@
-import axios from 'axios';
-import { all, call, put, takeLatest, take } from 'redux-saga/effects';
+import { all, call, put, takeLatest } from 'redux-saga/effects';
+import { getList } from '../api/request';
+import { ParamsGetListNote } from '../utils/interface';
+import { Note, Response } from './Model';
+import { fetchNoteFailure, fetchNoteList, fetchNoteSuccess } from './slice';
 
-import { fetchTodoFailure, fetchTodoSuccess } from './actions';
-import { FETCH_TODO_REQUEST } from './actions/actionTypes';
-import { ITodo } from './actions/types';
-
-const getTodos = () =>
-  axios.get<ITodo[]>('https://jsonplaceholder.typicode.com/todos');
-
-function* fetchTodoSaga() {
+export function* fetchNoteSaga(data: any) {
+  const params = data.payload;
   try {
-    //@ts-ignore
-    const response = yield call(getTodos);
-    console.log('call api');
-    yield put(
-      fetchTodoSuccess({
-        todos: response.data
-      })
-    );
-    console.log('call api');
+    const response: Response<Note> = yield call(getList, params);
+    yield put(fetchNoteSuccess(response.data));
   } catch (e: any) {
     yield put(
-      fetchTodoFailure({
+      fetchNoteFailure({
         error: e.message
       })
     );
   }
 }
 
-function* todoSaga() {
-  yield all([takeLatest(FETCH_TODO_REQUEST, fetchTodoSaga)]);
+function* NoteSaga() {
+  yield all([takeLatest(fetchNoteList.type, fetchNoteSaga)]);
 }
 
-export default todoSaga;
+export default NoteSaga;

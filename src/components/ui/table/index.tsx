@@ -1,4 +1,3 @@
-import React from 'react';
 import { PropsType } from './interface';
 
 function Table(props: PropsType) {
@@ -21,30 +20,31 @@ function Table(props: PropsType) {
       <table>
         <thead>
           <tr>
-            {columns.map((_column) => (
+            {columns.map((column) => (
               <th
                 style={{
-                  width: _column.width,
+                  width: column.width,
                   textAlign: 'left'
                 }}
-                key={_column.key}
+                key={column.name}
               >
-                {_column.name}
+                {column.name}
               </th>
             ))}
           </tr>
         </thead>
 
         <tbody>
-          {mapData(data).map((_item: any) => {
+          {mapData(data).map((item: any, index) => {
             return (
-              <tr>
-                {_item.map((__item: any) => (
+              <tr key={index}>
+                {item.map((_item: any, _index: number) => (
                   <td
-                    style={{ width: __item.width }}
-                    onClick={() => console.log(__item)}
+                    style={{ width: _item.width }}
+                    onClick={() => console.log(_item)}
+                    key={`${item.key}_${_index}`}
                   >
-                    {__item.render ? __item.render(__item) : __item.value}
+                    {_item.render ? _item.render(_item) : _item.value}
                   </td>
                 ))}
               </tr>
