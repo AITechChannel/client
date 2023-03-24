@@ -1,4 +1,4 @@
-import todoSaga from '@/features/my-note/redux/saga';
+import todoSaga from '@/features/notes/redux/saga';
 import { all, fork } from 'redux-saga/effects';
 
 export function* rootSaga() {

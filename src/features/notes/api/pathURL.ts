@@ -1,5 +1,5 @@
 export default {
   note: {
-    list: 'note/list'
+    list: 'notes'
   }
 };

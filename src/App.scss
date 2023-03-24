@@ -1,0 +1,11 @@
+.input-primary {
+  outline: none;
+  border-radius: 10px;
+  height: 40px;
+  padding: 0 10px;
+  border: 1px solid #c5c5c5;
+  &:hover,
+  &:focus {
+    border: 1px solid hsl(194, 52%, 50%);
+  }
+}

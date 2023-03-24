@@ -1,0 +1,32 @@
+.table-wrapper {
+  width: 100%;
+
+  border-collapse: collapse !important;
+  border: none !important;
+  border-spacing: 0 !important;
+  border-collapse: separate !important;
+  padding-left: 0 !important;
+  padding-top: 0 !important;
+  padding-bottom: 0 !important;
+
+  thead tr th {
+    height: 60px;
+    border-right: 0;
+    border-spacing: 0;
+    border: unset;
+    border-bottom: 1px solid #524343;
+  }
+
+  tr {
+    border: none !important;
+  }
+
+  //   td {
+  //     border-spacing: 0 !important;
+  //     border: none !important;
+  //     margin: 0 !important;
+  //     padding-top: 0 !important;
+  //     padding-bottom: 0 !important;
+  //     padding-right: 0 !important;
+  //   }
+}

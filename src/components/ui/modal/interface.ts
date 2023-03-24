@@ -1,9 +1,10 @@
-import { ReactNode } from "react";
+import { ReactNode } from 'react';
 
 export interface PropsType {
   children: ReactNode;
-  onOK: () => void;
+  onOK?: () => void;
   onCancel: () => void;
   visible: Boolean;
-  title: String;
+  title?: String;
+  offClickOutSide?: boolean;
 }

@@ -1,4 +1,4 @@
-import MyNote from '@/features/my-note';
+import Notes from '@/features/notes';
 import { createBrowserRouter } from 'react-router-dom';
 import Home from '../features/dashboard';
 
@@ -8,8 +8,8 @@ const router = createBrowserRouter([
     element: <Home />
   },
   {
-    path: '/my-note',
-    element: <MyNote />
+    path: '/notes',
+    element: <Notes />
   }
 ]);
 

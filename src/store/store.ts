@@ -3,7 +3,7 @@ import { configureStore } from '@reduxjs/toolkit';
 import dashboardSlice from '../features/dashboard/redux/slice';
 import { TypedUseSelectorHook, useDispatch, useSelector } from 'react-redux';
 import createSagaMiddleware from 'redux-saga';
-import myNoteSlice from '@/features/my-note/redux/slice';
+import myNoteSlice from '@/features/notes/redux/slice';
 import { rootSaga } from './rootSaga';
 
 const sagaMiddleware = createSagaMiddleware();
