@@ -1,23 +1,28 @@
-import { createSlice } from "@reduxjs/toolkit";
-import type { PayloadAction } from "@reduxjs/toolkit";
-import type { RootState } from "../store";
+import { createSlice } from '@reduxjs/toolkit';
+import type { PayloadAction } from '@reduxjs/toolkit';
+import type { RootState } from '../store';
 
-// Define a type for the slice state
-interface ThemeState {
-  value: "LIGHT" | "DARK";
+export enum Theme {
+  Light = 'theme-light',
+  Dark = 'theme-dark'
 }
 
-// Define the initial state using that type
+interface ThemeState {
+  value: Theme.Dark | Theme.Light;
+}
+
 const initialState: ThemeState = {
-  value: "DARK"
+  value: Theme.Dark
 };
 
 export const themeSlice = createSlice({
-  name: "theme",
+  name: 'theme',
   initialState,
   reducers: {
     toggleTheme: (state) => {
-      state.value === "DARK" ? (state.value = "LIGHT") : (state.value = "DARK");
+      state.value === Theme.Dark
+        ? (state.value = Theme.Light)
+        : (state.value = Theme.Dark);
     }
   }
 });

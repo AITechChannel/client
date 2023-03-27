@@ -1,6 +1,6 @@
 import { DefaultParamsTypeNoteList } from './interface';
 
-export const LIMIT = 10;
+export const LIMIT = 15;
 
 export enum ACTION {
   Delete = 'DELETE',
@@ -9,8 +9,7 @@ export enum ACTION {
   Create = 'CREATE'
 }
 
-export const DefaultParamsNoteList: DefaultParamsTypeNoteList = {
-  keyword: '',
+export const DEFAULT_PARAMS: DefaultParamsTypeNoteList = {
   page: 1,
   limit: LIMIT
 };

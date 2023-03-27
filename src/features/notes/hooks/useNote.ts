@@ -1,5 +1,6 @@
+import { detailNote } from './../redux/slice';
 import { DefaultParamsTypeNoteList } from './../utils/interface';
-import { ACTION, DefaultParamsNoteList } from '../utils/constant';
+import { ACTION, DEFAULT_PARAMS } from '../utils/constant';
 import { useAppSelector } from '@/store/store';
 import { useDispatch } from 'react-redux';
 import {
@@ -14,7 +15,12 @@ import {
   updateAction,
   deleteNote,
   updateParams,
-  params
+  fetchNoteListMore,
+  current_page,
+  total_page,
+  params,
+  loading,
+  fetchDetailNote
 } from '../redux/slice';
 import { ParamsGeNoteList } from '../utils/interface';
 
@@ -23,13 +29,29 @@ const useNote = () => {
   const _listNote = useAppSelector(noteList);
   const _showModal = useAppSelector(showModal);
   const _params = useAppSelector(params);
+  const _current_page = useAppSelector(current_page);
+  const _total_page = useAppSelector(total_page);
+  const _loading = useAppSelector(loading);
+
+  const _detailNote = useAppSelector(detailNote);
 
   const _toggleModalAddNote = () => {
     dispatch(toggleModalAddNote());
   };
 
   const _fetchNoteList = (params?: ParamsGeNoteList) => {
-    dispatch(fetchNoteList(params || DefaultParamsNoteList));
+    dispatch(fetchNoteList(params || DEFAULT_PARAMS));
+  };
+
+  const _fetchNoteListMore = () => {
+    if (
+      _current_page === _total_page ||
+      !_current_page ||
+      _loading.noteListMore
+    )
+      return;
+    const paramsLoadMore = { ..._params, page: _current_page + 1 };
+    dispatch(fetchNoteListMore(paramsLoadMore));
   };
 
   const _createNote = (data: object) => {
@@ -41,6 +63,11 @@ const useNote = () => {
 
     if (name === ACTION.Delete) {
       dispatch(deleteNote(id));
+    }
+
+    if (name === ACTION.View) {
+      console.log('action');
+      dispatch(fetchDetailNote(id));
     }
   };
 
@@ -55,7 +82,9 @@ const useNote = () => {
     showModal: _showModal,
     createNote: _createNote,
     fetchNoteList: _fetchNoteList,
-    toggleModalAddNote: _toggleModalAddNote
+    toggleModalAddNote: _toggleModalAddNote,
+    fetchNoteListMore: _fetchNoteListMore,
+    detailNote: _detailNote
   };
 };
 

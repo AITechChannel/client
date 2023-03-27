@@ -21,12 +21,17 @@
     border: none !important;
   }
 
-  //   td {
-  //     border-spacing: 0 !important;
-  //     border: none !important;
-  //     margin: 0 !important;
-  //     padding-top: 0 !important;
-  //     padding-bottom: 0 !important;
-  //     padding-right: 0 !important;
-  //   }
+  thead {
+    display: block;
+  }
+
+  tbody {
+    display: block;
+    table-layout: fixed;
+    width: 100%;
+  }
+
+  tbody tr td {
+    height: 40px;
+  }
 }

@@ -1,10 +1,10 @@
-import React from "react";
-import Header from "../header";
-import Sidebar from "../side-bar";
-import { PropsType } from "./interface";
-import { theme, toggleTheme } from "../../../store/common/themeSlice";
-import { useAppSelector } from "@/store/store";
-import styles from "./style.module.scss";
+import React from 'react';
+import Header from '../header';
+import Sidebar from '../side-bar';
+import { PropsType } from './interface';
+import { Theme, theme, toggleTheme } from '../../../store/common/themeSlice';
+import { useAppSelector } from '@/store/store';
+import styles from './style.module.scss';
 
 function MainLayout(props: PropsType) {
   const { children } = props;
@@ -17,15 +17,7 @@ function MainLayout(props: PropsType) {
       <div className={styles.body}>
         <Sidebar />
 
-        <div
-          className={`${styles.content} ${
-            themeValue === "DARK"
-              ? styles["content-dark"]
-              : styles["content-light"]
-          }`}
-        >
-          {children}
-        </div>
+        <div className={`${styles.content} ${themeValue}`}>{children}</div>
       </div>
     </>
   );

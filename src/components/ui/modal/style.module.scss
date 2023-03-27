@@ -4,15 +4,14 @@
   bottom: 0;
   left: 0;
   right: 0;
-  background: rgb(0, 0, 0, 0.1);
+  background: rgb(0, 0, 0, 0.3);
   display: flex;
   align-items: center;
   justify-content: center;
 
   .modal {
     border-radius: 10px;
-    background: white;
-    padding: 10px;
+    padding: 20px;
     display: flex;
     flex-direction: column;
     justify-content: space-between;
@@ -21,6 +20,7 @@
       display: flex;
       justify-content: space-between;
       align-items: center;
+      margin-bottom: 20px;
     }
 
     .icon-close {

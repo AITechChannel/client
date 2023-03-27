@@ -4,6 +4,8 @@ import styles from './style.module.scss';
 import React from 'react';
 import { PropsType } from './interface';
 import IconClose from '../icons/IconClose';
+import { useAppSelector } from '@/store/store';
+import { theme } from '@/store/common/themeSlice';
 
 function Modal(props: PropsType) {
   const {
@@ -23,15 +25,20 @@ function Modal(props: PropsType) {
     onCancel();
   };
 
+  const themeValue = useAppSelector(theme);
+
   return (
     <>
       {visible &&
         createPortal(
           <div
-            className={styles['modal-wrapper']}
+            className={`${styles['modal-wrapper']} ${themeValue}`}
             onClick={handleOnClickOutSide}
           >
-            <div className={styles.modal} onClick={onClickInSide}>
+            <div
+              className={`${styles.modal} ${themeValue}`}
+              onClick={onClickInSide}
+            >
               <div className={styles.header}>
                 <h3>{title}</h3>
                 <IconClose

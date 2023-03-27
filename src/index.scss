@@ -6,3 +6,24 @@
   box-sizing: border-box;
   font-family: 'Poppins', sans-serif;
 }
+
+:root {
+  --primary-color: #333;
+}
+
+*::-webkit-scrollbar {
+  width: 0.7rem;
+  height: 0.7rem;
+  background-color: #dadada;
+  border-radius: 0.5rem;
+}
+
+*::-webkit-scrollbar-thumb {
+  background-color: #a0a0a0;
+  border-radius: 0.5rem;
+
+  &:hover {
+    background-color: #a2a2a5;
+    cursor: pointer;
+  }
+}

@@ -1,5 +1,6 @@
 export const addIndex = (data: any[]) => {
-  if (!data.length) return data;
+  console.log('🚀 ::: data:', data);
+  if (!data.length) return [];
   return data.map((item: any, index: number) => {
     return {
       ...item,

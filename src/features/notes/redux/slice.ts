@@ -1,11 +1,14 @@
-import { createSlice } from '@reduxjs/toolkit';
+import { createSlice, current } from '@reduxjs/toolkit';
 import type { RootState } from '../../../store/store';
 import { Note } from '../api/model';
 import { addIndex } from '../utils/helper';
 
 export interface InitNoteSate {
-  loading: { noteList: boolean };
+  loading: { noteList: boolean; noteListMore: boolean };
   noteList: Note[];
+  detailNote: Note | null;
+  total_page: number | null;
+  current_page: number | null;
   showModal: {
     addNote: boolean;
   };
@@ -17,8 +20,11 @@ export interface InitNoteSate {
 }
 
 const initialState: InitNoteSate = {
-  loading: { noteList: false },
+  loading: { noteList: false, noteListMore: false },
   noteList: [],
+  detailNote: null,
+  total_page: null,
+  current_page: null,
   showModal: {
     addNote: false
   },
@@ -40,6 +46,7 @@ export const myNoteSlice = createSlice({
     updateAction: (state, action) => {
       state.action = action.payload;
     },
+
     updateParams: (state, action) => {
       state.params = action.payload;
     },
@@ -56,11 +63,31 @@ export const myNoteSlice = createSlice({
 
     fetchNoteSuccess: (state, action) => {
       state.loading.noteList = false;
-      state.noteList = addIndex(action.payload);
+      state.noteList = addIndex(action.payload.data);
+      state.total_page = action.payload.total_page;
+      state.current_page = action.payload.current_page;
     },
 
     fetchNoteFailure: (state, action) => {
       state.loading.noteList = false;
+    },
+
+    fetchNoteListMore: (state, action) => {
+      state.loading.noteListMore = true;
+    },
+
+    fetchNoteListMoreSuccess: (state, action) => {
+      state.noteList = addIndex([...state.noteList, ...action.payload.data]);
+      state.loading.noteListMore = false;
+      state.current_page = action.payload.current_page;
+    },
+
+    fetchDetailNote: (state, action) => {
+      state.loading.noteList = true;
+    },
+
+    fetchDetailNoteSuccess: (state, action) => {
+      state.detailNote = action.payload;
     },
 
     deleteNote: (state, action) => {},
@@ -76,11 +103,19 @@ export const {
   createNote,
   updateAction,
   updateParams,
-  deleteNote
+  deleteNote,
+  fetchNoteListMore,
+  fetchNoteListMoreSuccess,
+  fetchDetailNoteSuccess,
+  fetchDetailNote
 } = myNoteSlice.actions;
 
 export const noteList = (state: RootState) => state.myNote.noteList;
 export const showModal = (state: RootState) => state.myNote.showModal;
 export const params = (state: RootState) => state.myNote.params;
+export const total_page = (state: RootState) => state.myNote.total_page;
+export const current_page = (state: RootState) => state.myNote.current_page;
+export const loading = (state: RootState) => state.myNote.loading;
+export const detailNote = (state: RootState) => state.myNote.detailNote;
 
 export default myNoteSlice.reducer;

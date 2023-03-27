@@ -2,7 +2,7 @@ import { PropsType } from './interface';
 import styles from './style.module.scss';
 
 function Table(props: PropsType) {
-  const { columns, data } = props;
+  const { columns, data, onLoadMore } = props;
 
   const mapData = (data: any[]) => {
     return data.map((_item: any) =>
@@ -14,6 +14,15 @@ function Table(props: PropsType) {
         };
       })
     );
+  };
+
+  const handleOnScroll = (e: any) => {
+    if (
+      e.target.scrollTop + e.target.offsetHeight >=
+      e.target.scrollHeight - 10
+    ) {
+      onLoadMore();
+    }
   };
 
   return (
@@ -34,7 +43,7 @@ function Table(props: PropsType) {
         </tr>
       </thead>
 
-      <tbody>
+      <tbody onScroll={handleOnScroll}>
         {mapData(data).map((item: any, index) => {
           return (
             <tr key={index}>

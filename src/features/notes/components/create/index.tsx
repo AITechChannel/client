@@ -31,9 +31,13 @@ function Create() {
   });
 
   return (
-    <Modal onCancel={toggleModalAddNote} visible={showModal.addNote}>
+    <Modal
+      title={'Add your note'}
+      onCancel={toggleModalAddNote}
+      visible={showModal.addNote}
+    >
       <form onSubmit={formik.handleSubmit}>
-        <label htmlFor='title'>
+        <label className={styles.title} htmlFor='title'>
           <span>Title</span>
           <input
             className='input-primary'
@@ -47,7 +51,7 @@ function Create() {
         <div className={styles.editor}>
           <Editor onChange={handleChangeEditor} data={dataEditor} />
         </div>
-        <Button htmlType='submit'>Tao moi</Button>
+        <Button htmltype='submit'>Create note</Button>
       </form>
     </Modal>
   );

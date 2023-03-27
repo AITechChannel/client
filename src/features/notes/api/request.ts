@@ -8,6 +8,12 @@ export const getList = async (params?: ParamsGeNoteList) => {
   } catch (error) {}
 };
 
+export const getNoteDetail = async (id: Number) => {
+  try {
+    return await RequestApi.get(pathURL.note.list + '/' + id);
+  } catch (error) {}
+};
+
 export const createNote = async (payload: any) => {
   try {
     return await RequestApi.post(pathURL.note.list, payload);

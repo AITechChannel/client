@@ -2,6 +2,7 @@ import { ReactElement, ReactNode } from 'react';
 export interface PropsType {
   columns: ColumnsType[];
   data: any[];
+  onLoadMore: () => void;
 }
 
 export interface ColumnsType {

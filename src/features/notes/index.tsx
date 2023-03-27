@@ -20,9 +20,9 @@ function Notes() {
 
   return (
     <MainLayout>
-      <Button type='primary' onClick={toggleModalAddNote}>
+      {/* <Button type='primary' onClick={toggleModalAddNote}>
         Create
-      </Button>
+      </Button> */}
       {/* <Filter /> */}
 
       <List />

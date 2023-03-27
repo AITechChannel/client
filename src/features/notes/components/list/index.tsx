@@ -3,9 +3,16 @@ import Table from '@/components/ui/table';
 import { useEffect } from 'react';
 import useNote from '../../hooks/useNote';
 import { ACTION } from '../../utils/constant';
+import styles from './style.module.scss';
 
 function List() {
-  const { fetchNoteList, listNote, handleActions } = useNote();
+  const {
+    detailNote,
+    fetchNoteList,
+    listNote,
+    handleActions,
+    fetchNoteListMore
+  } = useNote();
   const columns = [
     {
       name: 'No',
@@ -21,21 +28,21 @@ function List() {
       width: 300,
       align: 'left'
     },
-    {
-      name: 'Content',
-      dataIndex: 'content',
-      key: 'content',
-      width: 300,
-      render: (data: any) => {
-        return (
-          <div
-            className='ck-content'
-            dangerouslySetInnerHTML={{ __html: data.content }}
-          />
-        );
-      },
-      align: 'left'
-    },
+    // {
+    //   name: 'Content',
+    //   dataIndex: 'content',
+    //   key: 'content',
+    //   width: 300,
+    //   render: (data: any) => {
+    //     return (
+    //       <div
+    //         className='ck-content'
+    //         dangerouslySetInnerHTML={{ __html: data.content }}
+    //       />
+    //     );
+    //   },
+    //   align: 'left'
+    // },
     {
       name: 'Actions',
       dataIndex: '',
@@ -43,9 +50,14 @@ function List() {
       width: 100,
       render: (data: any) => {
         return (
-          <Button onClick={() => handleActions(ACTION.Delete, data._id)}>
-            Del
-          </Button>
+          <div>
+            <button onClick={() => handleActions(ACTION.Delete, data._id)}>
+              Del
+            </button>
+            <button onClick={() => handleActions(ACTION.View, data._id)}>
+              view
+            </button>
+          </div>
         );
       },
       align: 'left'
@@ -53,8 +65,26 @@ function List() {
   ];
 
   return (
-    <div>
-      <Table columns={columns} data={listNote} />
+    <div className={styles['list-wrapper']}>
+      <div className={styles['table-wrapper']}>
+        <Table
+          onLoadMore={fetchNoteListMore}
+          columns={columns}
+          data={listNote}
+        />
+      </div>
+      <div className={styles['content-wrapper']}>
+        <div className={styles.header}>
+          <h4>Note detail</h4>
+          <Button>Create</Button>
+        </div>
+        <div
+          className='ck-content'
+          dangerouslySetInnerHTML={{
+            __html: detailNote?.content ? detailNote?.content : ''
+          }}
+        />
+      </div>
     </div>
   );
 }

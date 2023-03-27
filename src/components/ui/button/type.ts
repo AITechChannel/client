@@ -35,7 +35,7 @@ export type AnchorButtonProps = {
   target?: string;
   to?: string;
   onClick?: React.MouseEventHandler<HTMLElement>;
-  htmlType?: ButtonHTMLType;
+  htmltype?: ButtonHTMLType;
 } & TypeProps &
   Omit<React.AnchorHTMLAttributes<any>, 'type' | 'onClick'>;
 

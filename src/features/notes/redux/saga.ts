@@ -6,13 +6,30 @@ import {
   deleteNote,
   fetchNoteFailure,
   fetchNoteList,
-  fetchNoteSuccess
+  fetchNoteSuccess,
+  fetchNoteListMore,
+  fetchNoteListMoreSuccess,
+  fetchDetailNoteSuccess,
+  fetchDetailNote
 } from './slice';
+
+export function* fetchDetailNoteSaga({ payload }: any) {
+  try {
+    const response: Record<string, string> = yield call(
+      request.getNoteDetail,
+      payload
+    );
+    yield put(fetchDetailNoteSuccess(response));
+  } catch (e: any) {}
+}
 
 export function* fetchNoteSaga({ payload }: any) {
   try {
-    const response: Response<Note> = yield call(request.getList, payload);
-    yield put(fetchNoteSuccess(response.data));
+    const response: Record<string, string> = yield call(
+      request.getList,
+      payload
+    );
+    yield put(fetchNoteSuccess(response));
   } catch (e: any) {
     yield put(
       fetchNoteFailure({
@@ -22,20 +39,34 @@ export function* fetchNoteSaga({ payload }: any) {
   }
 }
 
+export function* fetchNoteMoreSaga({ payload }: any) {
+  try {
+    const response: Record<string, string> = yield call(
+      request.getList,
+      payload
+    );
+    yield put(fetchNoteListMoreSuccess(response));
+  } catch (e: any) {}
+}
+
 export function* deleteNoteSaga({ payload }: any) {
   try {
-    const response: Response<Note> = yield call(request.deleteNote, payload);
-    // @ts-ignore
-    const state: any = yield select();
+    const response: Record<string, string> = yield call(
+      request.deleteNote,
+      payload
+    );
+    const state: Record<string, any> = yield select();
     yield put(fetchNoteList(state.myNote.params));
   } catch (e) {}
 }
 
 export function* createNoteSaga({ payload }: any) {
   try {
-    const response: Response<Note> = yield call(request.createNote, payload);
-    // @ts-ignore
-    const state: any = yield select();
+    const response: Record<string, string> = yield call(
+      request.createNote,
+      payload
+    );
+    const state: Record<string, any> = yield select();
     yield put(fetchNoteList(state.myNote.params));
   } catch (e) {}
 }
@@ -43,6 +74,8 @@ export function* createNoteSaga({ payload }: any) {
 function* NoteSaga() {
   yield all([
     takeLatest(fetchNoteList.type, fetchNoteSaga),
+    takeLatest(fetchDetailNote.type, fetchDetailNoteSaga),
+    takeLatest(fetchNoteListMore.type, fetchNoteMoreSaga),
     takeLatest(createNote.type, createNoteSaga),
     takeLatest(deleteNote.type, deleteNoteSaga)
   ]);
