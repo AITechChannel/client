@@ -3,7 +3,9 @@ import IconAvatar from '@/components/ui/icons/IconAvatar';
 import IconLightDark from '@/components/ui/icons/IconLightDark';
 import IconLogout from '@/components/ui/icons/IconLogout';
 import Switch from '@/components/ui/switch';
+import useNote from '@/features/notes/hooks/useNote';
 import { ACTION } from '@/features/notes/utils/constant';
+import { logout } from '@/firebase';
 import { Theme, theme, toggleTheme } from '@/store/common/themeSlice';
 import { useAppDispatch, useAppSelector } from '@/store/store';
 import Logo from '../../../assets/logo.png';
@@ -14,6 +16,12 @@ function Header() {
 
   const onChangeSwitch = () => {
     dispatch(toggleTheme());
+  };
+
+  const handleActions = (name: string) => {
+    if (name === ACTION.Logout) {
+      logout();
+    }
   };
 
   const profileItems = [
@@ -30,6 +38,7 @@ function Header() {
   ];
 
   const themeValue = useAppSelector(theme);
+
   return (
     <div className={`${styles['header-wrapper']}`}>
       <div className={styles['logo-wrapper']}>
@@ -41,7 +50,11 @@ function Header() {
           onChange={onChangeSwitch}
           icon={<IconLightDark />}
         />
-        <Dropdown placement='left' onSelect={() => {}} items={profileItems}>
+        <Dropdown
+          placement='left'
+          onSelect={handleActions}
+          items={profileItems}
+        >
           <div className={styles.avatar}>
             <IconAvatar />
           </div>

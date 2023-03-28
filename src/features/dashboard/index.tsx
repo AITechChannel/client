@@ -9,6 +9,14 @@ import Switch from '@/components/ui/switch';
 import IconLightDark from '@/components/ui/icons/IconLightDark';
 import Dropdown from '@/components/ui/drop-down';
 
+import { useEffect } from 'react';
+import { useAuthState } from 'react-firebase-hooks/auth';
+import { Provider } from 'react-redux';
+import { RouterProvider, useNavigate } from 'react-router';
+// import './Dashboard.css'
+import { collection, getDocs, query, where } from 'firebase/firestore';
+import { auth, db } from '@/firebase';
+
 function Home() {
   const [showModal, setShowModal] = useState(false);
   const [status, setStatus] = useState<0 | 1>(0);
@@ -25,6 +33,34 @@ function Home() {
     { id: 2, label: ' Label 2' },
     { id: 3, label: ' Label 3' }
   ];
+
+  const [user, loading, error] = useAuthState(auth);
+  const [name, setName] = useState('');
+  const navigate = useNavigate();
+
+  const fetchUserName = async () => {
+    if (!user?.uid) return;
+    console.log('🚀 ::: !user?.ui:', user?.uid);
+    try {
+      const q = query(collection(db, 'users'), where('uid', '==', user?.uid));
+      const doc = await getDocs(q);
+      const data = doc.docs[0].data();
+      console.log('🚀 ::::: fetchUserName ::::: data', data);
+      setName(data.name);
+      console.log(doc.docs[0].data());
+    } catch (err) {
+      console.error(err);
+      //   alert("An error occured while fetching user data");
+    }
+  };
+
+  // useEffect(() => {
+  //   if (loading) return;
+  //   if (!user) return navigate('/login');
+
+  //   fetchUserName();
+  //   console.log('dfsdf');
+  // }, [user, loading]);
 
   return (
     <MainLayout>

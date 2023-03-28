@@ -5,6 +5,7 @@ import { TypedUseSelectorHook, useDispatch, useSelector } from 'react-redux';
 import createSagaMiddleware from 'redux-saga';
 import myNoteSlice from '@/features/notes/redux/slice';
 import { rootSaga } from './rootSaga';
+import authSlice from './common/authSlice';
 
 const sagaMiddleware = createSagaMiddleware();
 
@@ -12,7 +13,8 @@ export const store = configureStore({
   reducer: {
     dashboard: dashboardSlice,
     theme: themeSlice,
-    myNote: myNoteSlice
+    myNote: myNoteSlice,
+    auth: authSlice
   },
   middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware().concat(sagaMiddleware)
