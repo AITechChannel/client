@@ -1,8 +1,9 @@
-import "./App.scss";
-import router from "./routers/router";
-import { RouterProvider } from "react-router";
-import { Provider } from "react-redux";
-import store from "./store/store";
+import './App.scss';
+import router from './routers/router';
+import { RouterProvider } from 'react-router';
+import { Provider } from 'react-redux';
+import store, { useAppSelector } from './store/store';
+import { theme } from './store/common/themeSlice';
 
 function App() {
   return (

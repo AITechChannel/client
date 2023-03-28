@@ -6,7 +6,8 @@ export enum ACTION {
   Delete = 'DELETE',
   View = 'View',
   Edit = 'EDIT',
-  Create = 'CREATE'
+  Create = 'CREATE',
+  Logout = 'LOGOUT'
 }
 
 export const DEFAULT_PARAMS: DefaultParamsTypeNoteList = {

@@ -1,9 +1,33 @@
 import Button from '@/components/ui/button';
+import Dropdown from '@/components/ui/dropdown';
+import IconDelete from '@/components/ui/icons/IconDelete';
+import IconEdit from '@/components/ui/icons/IconEdit';
+import IconThreeDot from '@/components/ui/icons/IconThreeDot';
+import IconView from '@/components/ui/icons/IconView';
 import Table from '@/components/ui/table';
-import { useEffect } from 'react';
+import { ColumnsType } from '@/components/ui/table/interface';
 import useNote from '../../hooks/useNote';
+
 import { ACTION } from '../../utils/constant';
 import styles from './style.module.scss';
+
+const itemActions = [
+  {
+    label: 'View',
+    action: ACTION.View,
+    icon: <IconView />
+  },
+  {
+    label: 'Edit',
+    action: ACTION.Edit,
+    icon: <IconEdit />
+  },
+  {
+    label: 'Delete',
+    action: ACTION.Delete,
+    icon: <IconDelete />
+  }
+];
 
 function List() {
   const {
@@ -11,38 +35,35 @@ function List() {
     fetchNoteList,
     listNote,
     handleActions,
-    fetchNoteListMore
+    fetchNoteListMore,
+    toggleModalAddNote
   } = useNote();
-  const columns = [
+
+  const columns: ColumnsType[] = [
     {
       name: 'No',
       dataIndex: 'no',
       key: 'no',
-      width: 80,
-      align: 'left'
+      width: 100,
+      align: 'center'
     },
     {
       name: 'Title',
       dataIndex: 'title',
       key: 'title',
       width: 300,
-      align: 'left'
+      align: 'left',
+      render: (data: any) => {
+        return (
+          <div
+            className={styles.title}
+            onClick={() => handleActions(ACTION.View, data._id)}
+          >
+            {data.title}
+          </div>
+        );
+      }
     },
-    // {
-    //   name: 'Content',
-    //   dataIndex: 'content',
-    //   key: 'content',
-    //   width: 300,
-    //   render: (data: any) => {
-    //     return (
-    //       <div
-    //         className='ck-content'
-    //         dangerouslySetInnerHTML={{ __html: data.content }}
-    //       />
-    //     );
-    //   },
-    //   align: 'left'
-    // },
     {
       name: 'Actions',
       dataIndex: '',
@@ -50,17 +71,16 @@ function List() {
       width: 100,
       render: (data: any) => {
         return (
-          <div>
-            <button onClick={() => handleActions(ACTION.Delete, data._id)}>
-              Del
-            </button>
-            <button onClick={() => handleActions(ACTION.View, data._id)}>
-              view
-            </button>
-          </div>
+          <Dropdown
+            onSelect={(action) => handleActions(action, data._id)}
+            items={itemActions}
+            placement='left'
+          >
+            <IconThreeDot className={styles['action-icon']} />
+          </Dropdown>
         );
       },
-      align: 'left'
+      align: 'center'
     }
   ];
 
@@ -76,10 +96,10 @@ function List() {
       <div className={styles['content-wrapper']}>
         <div className={styles.header}>
           <h4>Note detail</h4>
-          <Button>Create</Button>
+          <Button onClick={() => handleActions(ACTION.Create)}>Create</Button>
         </div>
         <div
-          className='ck-content'
+          className={`${styles.content} ck-content`}
           dangerouslySetInnerHTML={{
             __html: detailNote?.content ? detailNote?.content : ''
           }}

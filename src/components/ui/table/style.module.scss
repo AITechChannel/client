@@ -19,6 +19,9 @@
 
   tr {
     border: none !important;
+    &:hover {
+      background-color: rgba($color: #0b1121, $alpha: 0.1);
+    }
   }
 
   thead {
@@ -32,6 +35,6 @@
   }
 
   tbody tr td {
-    height: 40px;
+    height: 54px;
   }
 }

@@ -5,12 +5,31 @@
   justify-content: space-between;
   align-items: center;
 
-  border-bottom: 1px solid #4b4b4b;
-
   .logo-wrapper {
     height: 60px;
     width: 60px;
     border-radius: 10px;
     overflow: hidden;
+  }
+}
+
+.header-actions {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+
+  .avatar {
+    background-color: var(--secondary-color);
+    width: 34px;
+    height: 34px;
+    border-radius: 99px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    &:hover {
+      cursor: pointer;
+    }
+    svg {
+    }
   }
 }

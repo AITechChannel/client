@@ -2,28 +2,28 @@
 
 * {
   margin: 0;
-  padding: 0;
+  // padding: 0;
   box-sizing: border-box;
   font-family: 'Poppins', sans-serif;
 }
+// .ck-content {
+//   padding: unset;
+// }
 
 :root {
-  --primary-color: #333;
+  --primary-color: rgb(14, 165, 233);
+  --secondary-color: rgb(30, 41, 59);
+  --third-color: rgb(30, 41, 59);
 }
 
 *::-webkit-scrollbar {
-  width: 0.7rem;
-  height: 0.7rem;
-  background-color: #dadada;
+  width: 0.5rem;
+  height: 0.5rem;
+  background-color: #adadad;
   border-radius: 0.5rem;
 }
 
 *::-webkit-scrollbar-thumb {
-  background-color: #a0a0a0;
+  background-color: #707070;
   border-radius: 0.5rem;
-
-  &:hover {
-    background-color: #a2a2a5;
-    cursor: pointer;
-  }
 }

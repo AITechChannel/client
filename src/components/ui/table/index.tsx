@@ -33,7 +33,7 @@ function Table(props: PropsType) {
             <th
               style={{
                 width: column.width,
-                textAlign: 'left'
+                textAlign: column.align
               }}
               key={column.name}
             >
@@ -49,7 +49,7 @@ function Table(props: PropsType) {
             <tr key={index}>
               {item.map((_item: any, _index: number) => (
                 <td
-                  style={{ width: _item.width }}
+                  style={{ width: _item.width, textAlign: _item.align }}
                   onClick={() => console.log(_item)}
                   key={`${item.key}_${_index}`}
                 >

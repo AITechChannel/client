@@ -11,15 +11,15 @@ function MainLayout(props: PropsType) {
   const themeValue = useAppSelector(theme);
 
   return (
-    <>
+    <div className={themeValue}>
       <Header />
 
       <div className={styles.body}>
         <Sidebar />
 
-        <div className={`${styles.content} ${themeValue}`}>{children}</div>
+        <div className={`${styles.content} `}>{children}</div>
       </div>
-    </>
+    </div>
   );
 }
 

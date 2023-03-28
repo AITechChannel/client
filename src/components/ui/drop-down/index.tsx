@@ -3,7 +3,7 @@ import IconChecked from '../icons/IconChecked';
 import { PropsType } from './interface';
 import styles from './style.module.scss';
 
-function Dropdown(props: PropsType) {
+function Dropdown2(props: PropsType) {
   const { items } = props;
   return (
     <div className={styles['drop-down-wrapper']}>
@@ -18,4 +18,4 @@ function Dropdown(props: PropsType) {
   );
 }
 
-export default Dropdown;
+export default Dropdown2;

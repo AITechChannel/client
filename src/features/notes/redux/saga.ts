@@ -10,8 +10,23 @@ import {
   fetchNoteListMore,
   fetchNoteListMoreSuccess,
   fetchDetailNoteSuccess,
-  fetchDetailNote
+  fetchDetailNote,
+  updateNote,
+  updateNoteSuccess
 } from './slice';
+
+export function* updateNoteSaga({ payload }: any) {
+  const { _id } = payload;
+  try {
+    const response: Record<string, string> = yield call(
+      request.updateNote,
+      _id,
+      payload
+    );
+    const state: Record<string, any> = yield select();
+    yield put(fetchNoteList(state.myNote.params));
+  } catch (e: any) {}
+}
 
 export function* fetchDetailNoteSaga({ payload }: any) {
   try {
@@ -77,7 +92,8 @@ function* NoteSaga() {
     takeLatest(fetchDetailNote.type, fetchDetailNoteSaga),
     takeLatest(fetchNoteListMore.type, fetchNoteMoreSaga),
     takeLatest(createNote.type, createNoteSaga),
-    takeLatest(deleteNote.type, deleteNoteSaga)
+    takeLatest(deleteNote.type, deleteNoteSaga),
+    takeLatest(updateNote.type, updateNoteSaga)
   ]);
 }
 

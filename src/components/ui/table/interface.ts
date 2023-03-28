@@ -9,7 +9,7 @@ export interface ColumnsType {
   name?: string;
   width?: number | string | undefined;
   render?: Function;
-  align?: string;
+  align: 'left' | 'center' | 'right';
   dataIndex?: string;
   key?: string | number;
 }

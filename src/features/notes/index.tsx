@@ -12,7 +12,7 @@ import Input from '@/components/ui/input';
 
 function Notes() {
   const dispatch = useAppDispatch();
-  const { fetchNoteList, listNote, toggleModalAddNote } = useNote();
+  const { fetchNoteList, listNote, toggleModalAddNote, showModal } = useNote();
 
   useEffect(() => {
     fetchNoteList();
@@ -27,7 +27,7 @@ function Notes() {
 
       <List />
 
-      <Create />
+      {showModal.addNote && <Create />}
     </MainLayout>
   );
 }
