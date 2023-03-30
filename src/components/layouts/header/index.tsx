@@ -3,16 +3,36 @@ import IconAvatar from '@/components/ui/icons/IconAvatar';
 import IconLightDark from '@/components/ui/icons/IconLightDark';
 import IconLogout from '@/components/ui/icons/IconLogout';
 import Switch from '@/components/ui/switch';
-import useNote from '@/features/notes/hooks/useNote';
+import { logout } from '@/features/authentication/firebase';
 import { ACTION } from '@/features/notes/utils/constant';
-import { logout } from '@/firebase';
 import { Theme, theme, toggleTheme } from '@/store/common/themeSlice';
 import { useAppDispatch, useAppSelector } from '@/store/store';
 import Logo from '../../../assets/logo.png';
 import styles from './style.module.scss';
 
+import { auth } from '@/features/authentication/firebase';
+import { useEffect, useState } from 'react';
+import { useAuthState } from 'react-firebase-hooks/auth';
+
+import { collection, getDocs, query, where } from 'firebase/firestore';
+
+import { db } from '@/features/authentication/firebase';
+import { loginSuccess } from '@/store/common/authSlice';
+import { useDispatch } from 'react-redux';
+import { useNavigate } from 'react-router';
+
+import { userInfo } from '@/store/common/authSlice';
+
 function Header() {
   const dispatch = useAppDispatch();
+  const _userInfo = useAppSelector(userInfo);
+  console.log('🚀 ::: _userInfo:', _userInfo);
+
+  const themeValue = useAppSelector(theme);
+
+  const [user, loading, error] = useAuthState(auth);
+
+  const navigate = useNavigate();
 
   const onChangeSwitch = () => {
     dispatch(toggleTheme());
@@ -37,7 +57,28 @@ function Header() {
     }
   ];
 
-  const themeValue = useAppSelector(theme);
+  const fetchUserName = async () => {
+    if (!user?.uid) return;
+    try {
+      const q = query(collection(db, 'users'), where('uid', '==', user?.uid));
+      const doc = await getDocs(q);
+      const data = doc.docs[0].data();
+      dispatch(loginSuccess(data));
+    } catch (err) {
+      throw err;
+    }
+  };
+
+  useEffect(() => {
+    if (loading) return;
+
+    if (!user) navigate('/login');
+    fetchUserName();
+  }, [user, loading]);
+
+  // const firstName = _userInfo.name.split(' ').pop().join('');
+  // console.log('🚀 ::: _userInfo:', _userInfo);
+  // const lastName = _userInfo.name;
 
   return (
     <div className={`${styles['header-wrapper']}`}>
@@ -57,6 +98,10 @@ function Header() {
         >
           <div className={styles.avatar}>
             <IconAvatar />
+          </div>
+          <div className={styles.name}>
+            <span>{_userInfo?.name?.split(' ').slice(0, 2)}</span>
+            <span>{_userInfo?.name?.split(' ').pop()}</span>
           </div>
         </Dropdown>
       </div>

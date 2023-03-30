@@ -15,7 +15,7 @@ import { Provider } from 'react-redux';
 import { RouterProvider, useNavigate } from 'react-router';
 // import './Dashboard.css'
 import { collection, getDocs, query, where } from 'firebase/firestore';
-import { auth, db } from '@/firebase';
+import { auth, db } from '@/features/authentication/firebase';
 
 function Home() {
   const [showModal, setShowModal] = useState(false);

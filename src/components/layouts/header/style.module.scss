@@ -29,7 +29,19 @@
     &:hover {
       cursor: pointer;
     }
-    svg {
+    margin-right: 10px;
+  }
+  .name {
+    display: flex;
+    flex-direction: column;
+    span {
+      line-height: 16px;
+      display: block;
+      font-size: 14px;
+    }
+    span:first-child {
+      font-size: 12px;
+      margin-bottom: 0;
     }
   }
 }
