@@ -13,10 +13,10 @@ export const RequestApi = axios.create({
 RequestApi.interceptors.request.use(
   (config) => {
     let params = config.params || {};
-    // const token = getAccessToken();
-    // if (token) {
-    //   config.headers['Authorization'] = 'Bearer ' + token;
-    // }
+    const token = sessionStorage.getItem('TOKEN');
+    if (token) {
+      config.headers['Authorization'] = 'Bearer ' + token;
+    }
     return {
       ...config,
       params: params

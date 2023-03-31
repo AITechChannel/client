@@ -3,36 +3,45 @@ import IconAvatar from '@/components/ui/icons/IconAvatar';
 import IconLightDark from '@/components/ui/icons/IconLightDark';
 import IconLogout from '@/components/ui/icons/IconLogout';
 import Switch from '@/components/ui/switch';
-import { logout } from '@/features/authentication/firebase';
+import { logout } from '@/features/auth/firebase';
 import { ACTION } from '@/features/notes/utils/constant';
 import { Theme, theme, toggleTheme } from '@/store/common/themeSlice';
 import { useAppDispatch, useAppSelector } from '@/store/store';
 import Logo from '../../../assets/logo.png';
 import styles from './style.module.scss';
 
-import { auth } from '@/features/authentication/firebase';
+import { auth } from '@/features/auth/firebase';
 import { useEffect, useState } from 'react';
 import { useAuthState } from 'react-firebase-hooks/auth';
 
 import { collection, getDocs, query, where } from 'firebase/firestore';
 
-import { db } from '@/features/authentication/firebase';
-import { loginSuccess } from '@/store/common/authSlice';
+import { db } from '@/features/auth/firebase';
+
 import { useDispatch } from 'react-redux';
 import { useNavigate } from 'react-router';
 
-import { userInfo } from '@/store/common/authSlice';
+import useAuth from '@/features/auth/hooks/useAuth';
+import { getTokenSessionStorage } from '@/utils/helpers';
 
 function Header() {
   const dispatch = useAppDispatch();
-  const _userInfo = useAppSelector(userInfo);
-  console.log('🚀 ::: _userInfo:', _userInfo);
 
   const themeValue = useAppSelector(theme);
 
-  const [user, loading, error] = useAuthState(auth);
+  // const [user, loading, error] = useAuthState(auth);
 
+  const { loggedIn, authToken, logout, userInfo } = useAuth();
+  console.log('🚀 ::: userInfo:', userInfo);
   const navigate = useNavigate();
+
+  useEffect(() => {
+    if (!getTokenSessionStorage()) {
+      navigate('/login');
+      return;
+    }
+    navigate('/notes');
+  }, [getTokenSessionStorage()]);
 
   const onChangeSwitch = () => {
     dispatch(toggleTheme());
@@ -57,24 +66,24 @@ function Header() {
     }
   ];
 
-  const fetchUserName = async () => {
-    if (!user?.uid) return;
-    try {
-      const q = query(collection(db, 'users'), where('uid', '==', user?.uid));
-      const doc = await getDocs(q);
-      const data = doc.docs[0].data();
-      dispatch(loginSuccess(data));
-    } catch (err) {
-      throw err;
-    }
-  };
+  // const fetchUserName = async () => {
+  //   if (!user?.uid) return;
+  //   try {
+  //     const q = query(collection(db, 'users'), where('uid', '==', user?.uid));
+  //     const doc = await getDocs(q);
+  //     const data = doc.docs[0].data();
+  //     dispatch(loginSuccess(data));
+  //   } catch (err) {
+  //     throw err;
+  //   }
+  // };
 
-  useEffect(() => {
-    if (loading) return;
+  // useEffect(() => {
+  //   if (loading) return;
 
-    if (!user) navigate('/login');
-    fetchUserName();
-  }, [user, loading]);
+  //   if (!user) navigate('/login');
+  //   fetchUserName();
+  // }, [user, loading]);
 
   // const firstName = _userInfo.name.split(' ').pop().join('');
   // console.log('🚀 ::: _userInfo:', _userInfo);
@@ -100,8 +109,8 @@ function Header() {
             <IconAvatar />
           </div>
           <div className={styles.name}>
-            <span>{_userInfo?.name?.split(' ').slice(0, 2)}</span>
-            <span>{_userInfo?.name?.split(' ').pop()}</span>
+            <span>{userInfo?.username?.split(' ').slice(0, 2)}</span>
+            <span>{userInfo?.username?.split(' ').pop()}</span>
           </div>
         </Dropdown>
       </div>

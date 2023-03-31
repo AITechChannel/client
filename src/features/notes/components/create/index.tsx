@@ -21,7 +21,6 @@ function Create() {
     title: '',
     content: ''
   });
-  console.log('🚀 ::: initialValues:', initialValues);
 
   const handleChangeEditor = (e: any, editor: any) => {
     const data = editor.data.get();

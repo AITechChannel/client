@@ -3,13 +3,13 @@ import { useAuthState } from 'react-firebase-hooks/auth';
 import { Provider } from 'react-redux';
 import { RouterProvider } from 'react-router';
 import './App.scss';
-import { auth } from './features/authentication/firebase';
+import { auth } from './features/auth/firebase';
 import router from './routers/router';
 import store, { useAppDispatch } from './store/store';
 
 import { collection, getDocs, query, where } from 'firebase/firestore';
 
-import { db } from '@/features/authentication/firebase';
+import { db } from '@/features/auth/firebase';
 import { loginSuccess } from './store/common/authSlice';
 
 function App() {

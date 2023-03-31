@@ -1,4 +1,4 @@
-import Login from '@/features/login';
+import Login from '@/features/auth';
 import Notes from '@/features/notes';
 import { createBrowserRouter } from 'react-router-dom';
 import Home from '../features/dashboard';

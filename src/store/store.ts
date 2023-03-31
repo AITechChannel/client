@@ -5,7 +5,7 @@ import { TypedUseSelectorHook, useDispatch, useSelector } from 'react-redux';
 import createSagaMiddleware from 'redux-saga';
 import myNoteSlice from '@/features/notes/redux/slice';
 import { rootSaga } from './rootSaga';
-import authSlice from './common/authSlice';
+import authSlice from '@/features/auth/redux/slice';
 
 const sagaMiddleware = createSagaMiddleware();
 

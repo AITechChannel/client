@@ -1,10 +1,9 @@
+import { RootState } from '@/store/store';
 import { createSlice } from '@reduxjs/toolkit';
-import type { PayloadAction } from '@reduxjs/toolkit';
-import type { RootState } from '../store';
 
 interface AuthState {
   loggedIn: boolean;
-  authToken: string | undefined;
+  authToken: any;
   userInfo: any;
   isUserLoaded: boolean;
 }
@@ -20,17 +19,30 @@ export const authSlice = createSlice({
   name: 'auth',
   initialState,
   reducers: {
+    login: (state, action) => {},
+    logout: (state, action) => {},
     loginSuccess: (state, action) => {
       state.loggedIn = true;
-      state.userInfo = action.payload;
+      state.authToken = action.payload;
+      state.userInfo = action.payload.userInfo;
+      sessionStorage.setItem('TOKEN', action.payload.token);
     },
-    logoutSuccess: (state) => {
+
+    logoutSuccess: (state, action) => {
+      sessionStorage.removeItem('TOKEN');
       state.loggedIn = false;
-    }
+    },
+    refreshTokenSuccess: (state) => {}
   }
 });
 
-export const { loginSuccess, logoutSuccess } = authSlice.actions;
+export const {
+  loginSuccess,
+  logoutSuccess,
+  refreshTokenSuccess,
+  login,
+  logout
+} = authSlice.actions;
 export const loggedIn = (state: RootState) => state.auth.loggedIn;
 export const authToken = (state: RootState) => state.auth.authToken;
 export const userInfo = (state: RootState) => state.auth.userInfo;

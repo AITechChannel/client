@@ -1,0 +1,33 @@
+.login-wrapper {
+  background-color: rgb(48, 48, 48);
+  color: white;
+  height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+
+  form {
+    display: flex;
+    flex-direction: column;
+    gap: 26px;
+    label {
+      display: flex;
+      flex-direction: column;
+    }
+
+    label:first-child {
+      margin-bottom: -10px;
+    }
+
+    .field-error {
+      border-color: red;
+    }
+
+    .msg-error {
+      color: red;
+      font-size: 12px;
+      margin-top: 6px;
+    }
+  }
+}
