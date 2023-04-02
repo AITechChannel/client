@@ -1,3 +1,4 @@
+import { action } from './../../notes/redux/slice';
 import { RootState } from '@/store/store';
 import { createSlice } from '@reduxjs/toolkit';
 
@@ -26,13 +27,17 @@ export const authSlice = createSlice({
       state.authToken = action.payload;
       state.userInfo = action.payload.userInfo;
       sessionStorage.setItem('TOKEN', action.payload.token);
+      sessionStorage.setItem('REFRESH_TOKEN', action.payload.refresh_token);
     },
 
     logoutSuccess: (state, action) => {
       sessionStorage.removeItem('TOKEN');
       state.loggedIn = false;
     },
-    refreshTokenSuccess: (state) => {}
+    refreshToken: (state, action) => {},
+    refreshTokenSuccess: (state, action) => {
+      sessionStorage.setItem('TOKEN', action.payload.token);
+    }
   }
 });
 
@@ -41,7 +46,8 @@ export const {
   logoutSuccess,
   refreshTokenSuccess,
   login,
-  logout
+  logout,
+  refreshToken
 } = authSlice.actions;
 export const loggedIn = (state: RootState) => state.auth.loggedIn;
 export const authToken = (state: RootState) => state.auth.authToken;

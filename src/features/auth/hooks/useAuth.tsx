@@ -7,7 +7,8 @@ import {
   logout,
   loggedIn,
   authToken,
-  userInfo
+  userInfo,
+  refreshToken
 } from '../redux/slice';
 const useAuth = () => {
   const dispatch = useAppDispatch();
@@ -15,6 +16,11 @@ const useAuth = () => {
   const _loggedIn = useAppSelector(loggedIn);
   const _authToken = useAppSelector(authToken);
   const _userInfo = useAppSelector(userInfo);
+  const _refreshToken = () => {
+    dispatch(
+      refreshToken({ refreshToken: sessionStorage.getItem('REFRESH_TOKEN') })
+    );
+  };
 
   const _login = (payload: UserLogin) => {
     dispatch(login(payload));
@@ -29,7 +35,8 @@ const useAuth = () => {
     logout: _logout,
     loggedIn: _loggedIn,
     authToken: _authToken,
-    userInfo: _userInfo
+    userInfo: _userInfo,
+    refreshToken: _refreshToken
   };
 };
 

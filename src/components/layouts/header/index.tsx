@@ -31,8 +31,7 @@ function Header() {
 
   // const [user, loading, error] = useAuthState(auth);
 
-  const { loggedIn, authToken, logout, userInfo } = useAuth();
-  console.log('🚀 ::: userInfo:', userInfo);
+  const { loggedIn, authToken, logout, userInfo, refreshToken } = useAuth();
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -45,6 +44,7 @@ function Header() {
 
   const onChangeSwitch = () => {
     dispatch(toggleTheme());
+    refreshToken();
   };
 
   const handleActions = (name: string) => {

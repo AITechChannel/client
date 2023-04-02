@@ -1,5 +1,9 @@
 import axios from 'axios';
 import errorConstants from './constants';
+import { get } from 'http';
+import { store, useAppDispatch } from '@/store/store';
+import { refreshToken, refreshTokenSuccess } from '@/features/auth/redux/slice';
+import useAuth from '@/features/auth/hooks/useAuth';
 
 export const RequestApi = axios.create({
   baseURL: import.meta.env.VITE_BASE_URL,
@@ -29,8 +33,20 @@ RequestApi.interceptors.request.use(
 
 // Add a response interceptor
 
+const responseError = (error: any) => {
+  console.log('🚀 ::: error:', error);
+  if (error.response.status === 401) {
+    // console.log(store, useAppDispatch);
+
+    store.dispatch(
+      refreshToken({ refreshToken: sessionStorage.getItem('REFRESH_TOKEN') })
+    );
+  }
+};
+
 RequestApi.interceptors.response.use(
-  (response) => response.data
+  (response) => response.data,
+  responseError
   // (error) => {
   //   const status = get(error, 'response.status');
   //   const errorData = get(error, 'response.data');
@@ -57,3 +73,7 @@ RequestApi.interceptors.response.use(
   //   return Promise.reject({ ...errorData, status });
   // }
 );
+
+// RequestApi.interceptors.response.use(,responseError);
+
+// const responseError = (error) => {};
