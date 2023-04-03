@@ -22,29 +22,26 @@ import { useDispatch } from 'react-redux';
 import { useNavigate } from 'react-router';
 
 import useAuth from '@/features/auth/hooks/useAuth';
-import { getTokenSessionStorage } from '@/utils/helpers';
+import { getTokenLocalStorage } from '@/utils/helpers';
 
 function Header() {
   const dispatch = useAppDispatch();
 
   const themeValue = useAppSelector(theme);
 
-  // const [user, loading, error] = useAuthState(auth);
-
-  const { loggedIn, authToken, logout, userInfo, refreshToken } = useAuth();
+  const { loggedIn, authToken, logout, userInfo, refreshToken, reloadPage } =
+    useAuth();
   const navigate = useNavigate();
 
   useEffect(() => {
-    if (!getTokenSessionStorage()) {
+    if (!loggedIn) {
       navigate('/login');
       return;
     }
-    navigate('/notes');
-  }, [getTokenSessionStorage()]);
+  }, []);
 
   const onChangeSwitch = () => {
     dispatch(toggleTheme());
-    refreshToken();
   };
 
   const handleActions = (name: string) => {
@@ -56,8 +53,8 @@ function Header() {
   const profileItems = [
     {
       label: 'Profile',
-      action: ACTION.Logout,
-      icon: <IconAvatar />
+      action: ACTION.Logout
+      // icon: <IconAvatar />
     },
     {
       label: 'Logout',
@@ -65,29 +62,6 @@ function Header() {
       icon: <IconLogout />
     }
   ];
-
-  // const fetchUserName = async () => {
-  //   if (!user?.uid) return;
-  //   try {
-  //     const q = query(collection(db, 'users'), where('uid', '==', user?.uid));
-  //     const doc = await getDocs(q);
-  //     const data = doc.docs[0].data();
-  //     dispatch(loginSuccess(data));
-  //   } catch (err) {
-  //     throw err;
-  //   }
-  // };
-
-  // useEffect(() => {
-  //   if (loading) return;
-
-  //   if (!user) navigate('/login');
-  //   fetchUserName();
-  // }, [user, loading]);
-
-  // const firstName = _userInfo.name.split(' ').pop().join('');
-  // console.log('🚀 ::: _userInfo:', _userInfo);
-  // const lastName = _userInfo.name;
 
   return (
     <div className={`${styles['header-wrapper']}`}>

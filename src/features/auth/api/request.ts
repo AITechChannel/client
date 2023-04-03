@@ -37,6 +37,14 @@ export const login = async (payload: UserLogin) => {
   }
 };
 
+export const register = async (payload: UserLogin) => {
+  try {
+    return await RequestApi.post(pathURL.authenticate.register, payload);
+  } catch (error) {
+    throw error;
+  }
+};
+
 export const logout = async (payload: any) => {
   try {
     return await RequestApi.post('/logout', payload);

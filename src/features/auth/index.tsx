@@ -9,17 +9,17 @@ import Button from '@/components/ui/button';
 import useAuth from './hooks/useAuth';
 import { UserLogin } from './api/model';
 
-function Login() {
-  // const [user, loading, error] = useAuthState(auth);
-  // useEffect(() => {
-  //   if (loading) {
-  //     return;
-  //   }
-  //   if (user) navigate('/');
-  // }, [user, loading]);
-  const navigate = useNavigate();
+import { collection, getDocs, query, where } from 'firebase/firestore';
 
-  const { login, logout, loggedIn } = useAuth();
+import { db } from '@/features/auth/firebase';
+
+import { useDispatch } from 'react-redux';
+
+function Login() {
+  const [user, loading, error] = useAuthState(auth);
+  const { login, logout, loggedIn, updateStatusLogin } = useAuth();
+
+  const navigate = useNavigate();
 
   useEffect(() => {
     if (!loggedIn) return;
@@ -56,6 +56,24 @@ function Login() {
       login(values);
     }
   });
+
+  const fetchUserName = async () => {
+    if (!user?.uid) return;
+    try {
+      const q = query(collection(db, 'users'), where('uid', '==', user?.uid));
+      const doc = await getDocs(q);
+      const data = doc.docs[0].data();
+      console.log(data);
+    } catch (err) {
+      throw err;
+    }
+  };
+
+  useEffect(() => {
+    if (loading) return;
+    if (!user) return;
+    fetchUserName();
+  }, [user, loading]);
 
   return (
     <div className={`${styles['login-wrapper']} theme-dark`}>
@@ -96,7 +114,13 @@ function Login() {
         </label>
 
         <Button htmltype='submit'>Login</Button>
-        <Button onClick={signInWithGoogle}>Login with google</Button>
+        <Button
+          onClick={(e) => {
+            e.preventDefault(), signInWithGoogle();
+          }}
+        >
+          Login with google
+        </Button>
       </form>
     </div>
   );

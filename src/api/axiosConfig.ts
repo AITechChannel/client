@@ -1,9 +1,11 @@
+import { refreshToken } from '@/features/auth/api/request';
+import { getTokenLocalStorage } from '@/utils/helpers';
 import axios from 'axios';
-import errorConstants from './constants';
-import { get } from 'http';
-import { store, useAppDispatch } from '@/store/store';
-import { refreshToken, refreshTokenSuccess } from '@/features/auth/redux/slice';
-import useAuth from '@/features/auth/hooks/useAuth';
+import jwt_decode from 'jwt-decode';
+import {
+  getRefreshTokenLocalStorage,
+  setTokenLocalStorage
+} from '../utils/helpers';
 
 export const RequestApi = axios.create({
   baseURL: import.meta.env.VITE_BASE_URL,
@@ -12,12 +14,10 @@ export const RequestApi = axios.create({
   }
 });
 
-// Add a request interceptor
-
 RequestApi.interceptors.request.use(
   (config) => {
     let params = config.params || {};
-    const token = sessionStorage.getItem('TOKEN');
+    const token = getTokenLocalStorage();
     if (token) {
       config.headers['Authorization'] = 'Bearer ' + token;
     }
@@ -31,17 +31,39 @@ RequestApi.interceptors.request.use(
   }
 );
 
-// Add a response interceptor
+const responseError = async (error: any) => {
+  if (!getTokenLocalStorage()) return;
+  const decodedToken: any = jwt_decode(getTokenLocalStorage() || '');
 
-const responseError = (error: any) => {
-  console.log('🚀 ::: error:', error);
-  if (error.response.status === 401) {
-    // console.log(store, useAppDispatch);
+  const decodedRefreshToken: any = jwt_decode(
+    getRefreshTokenLocalStorage() || ''
+  );
 
-    store.dispatch(
-      refreshToken({ refreshToken: sessionStorage.getItem('REFRESH_TOKEN') })
-    );
+  const tokenExpried = () => {
+    return decodedToken.exp < Math.floor(Date.now() / 1000);
+  };
+
+  const refreshTokenExpried = () => {
+    return decodedRefreshToken.exp < Math.floor(Date.now() / 1000);
+  };
+
+  if (!tokenExpried() || refreshTokenExpried()) return;
+
+  const prevRequest = error?.config;
+  if (error.response.status === 401 && !prevRequest?.sent) {
+    prevRequest.sent = true;
+    // const newAccessToken: any = await refreshToken({
+    //   refreshToken: getRefreshTokenLocalStorage() || ''
+    // });
+    // setTokenLocalStorage(newAccessToken.token);
+    // return RequestApi(prevRequest);
+
+    // store.dispatch(
+    //   refreshToken({ refreshToken: getRefreshTokenLocalStorage() })
+    // );
   }
+
+  // return Promise.reject(error);
 };
 
 RequestApi.interceptors.response.use(
@@ -73,7 +95,3 @@ RequestApi.interceptors.response.use(
   //   return Promise.reject({ ...errorData, status });
   // }
 );
-
-// RequestApi.interceptors.response.use(,responseError);
-
-// const responseError = (error) => {};

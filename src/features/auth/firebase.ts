@@ -93,7 +93,6 @@ const sendPasswordReset = async (email: string) => {
 };
 
 const logout = () => {
-  console.log('out');
   signOut(auth);
 };
 

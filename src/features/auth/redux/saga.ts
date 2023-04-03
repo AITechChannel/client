@@ -6,13 +6,25 @@ import {
   refreshTokenSuccess,
   logout,
   logoutSuccess,
-  refreshToken
+  refreshToken,
+  registerSuccess,
+  register
 } from './slice';
 
 export function* loginSaga({ payload }: any) {
   try {
     const response: Record<string, string> = yield call(request.login, payload);
     yield put(loginSuccess(response));
+  } catch (e: any) {}
+}
+
+export function* registerSaga({ payload }: any) {
+  try {
+    const response: Record<string, string> = yield call(
+      request.register,
+      payload
+    );
+    yield put(registerSuccess(response));
   } catch (e: any) {}
 }
 
@@ -39,6 +51,7 @@ export function* logoutSaga({ payload }: any) {
 function* AuthSaga() {
   yield all([
     takeLatest(login.type, loginSaga),
+    takeLatest(register.type, registerSaga),
     takeLatest(logout.type, logoutSaga),
     takeLatest(refreshToken.type, refreshTokenSaga)
   ]);
