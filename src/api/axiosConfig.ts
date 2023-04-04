@@ -52,18 +52,18 @@ const responseError = async (error: any) => {
   const prevRequest = error?.config;
   if (error.response.status === 401 && !prevRequest?.sent) {
     prevRequest.sent = true;
-    // const newAccessToken: any = await refreshToken({
-    //   refreshToken: getRefreshTokenLocalStorage() || ''
-    // });
-    // setTokenLocalStorage(newAccessToken.token);
-    // return RequestApi(prevRequest);
+    const newAccessToken: any = await refreshToken({
+      refreshToken: getRefreshTokenLocalStorage() || ''
+    });
+    setTokenLocalStorage(newAccessToken.token);
+    return RequestApi(prevRequest);
 
     // store.dispatch(
     //   refreshToken({ refreshToken: getRefreshTokenLocalStorage() })
     // );
   }
 
-  // return Promise.reject(error);
+  return Promise.reject(error);
 };
 
 RequestApi.interceptors.response.use(

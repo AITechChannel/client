@@ -3,22 +3,14 @@ import IconAvatar from '@/components/ui/icons/IconAvatar';
 import IconLightDark from '@/components/ui/icons/IconLightDark';
 import IconLogout from '@/components/ui/icons/IconLogout';
 import Switch from '@/components/ui/switch';
-import { logout } from '@/features/auth/firebase';
 import { ACTION } from '@/features/notes/utils/constant';
 import { Theme, theme, toggleTheme } from '@/store/common/themeSlice';
 import { useAppDispatch, useAppSelector } from '@/store/store';
 import Logo from '../../../assets/logo.png';
 import styles from './style.module.scss';
 
-import { auth } from '@/features/auth/firebase';
-import { useEffect, useState } from 'react';
-import { useAuthState } from 'react-firebase-hooks/auth';
+import { useEffect } from 'react';
 
-import { collection, getDocs, query, where } from 'firebase/firestore';
-
-import { db } from '@/features/auth/firebase';
-
-import { useDispatch } from 'react-redux';
 import { useNavigate } from 'react-router';
 
 import useAuth from '@/features/auth/hooks/useAuth';
@@ -26,15 +18,12 @@ import { getTokenLocalStorage } from '@/utils/helpers';
 
 function Header() {
   const dispatch = useAppDispatch();
-
   const themeValue = useAppSelector(theme);
-
-  const { loggedIn, authToken, logout, userInfo, refreshToken, reloadPage } =
-    useAuth();
+  const { logout, userInfo } = useAuth();
   const navigate = useNavigate();
 
   useEffect(() => {
-    if (!loggedIn) {
+    if (!getTokenLocalStorage()) {
       navigate('/login');
       return;
     }
@@ -53,8 +42,8 @@ function Header() {
   const profileItems = [
     {
       label: 'Profile',
-      action: ACTION.Logout
-      // icon: <IconAvatar />
+      action: ACTION.Logout,
+      icon: <IconAvatar />
     },
     {
       label: 'Logout',
@@ -83,8 +72,8 @@ function Header() {
             <IconAvatar />
           </div>
           <div className={styles.name}>
-            <span>{userInfo?.username?.split(' ').slice(0, 2)}</span>
-            <span>{userInfo?.username?.split(' ').pop()}</span>
+            <span>{userInfo?.firstName}</span>
+            <span>{userInfo?.lastname}</span>
           </div>
         </Dropdown>
       </div>

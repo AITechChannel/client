@@ -3,6 +3,6 @@ export default {
     login: 'users/login',
     logout: 'users/logout',
     refreshToken: 'users/refresh_token',
-    register: 'user/register'
+    register: 'users/register'
   }
 };

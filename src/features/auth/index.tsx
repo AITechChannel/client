@@ -1,23 +1,22 @@
-import React, { useEffect } from 'react';
-
-import { signInWithGoogle, auth } from '@/features/auth/firebase';
+import Button from '@/components/ui/button';
+import { auth, signInWithGoogle } from '@/features/auth/firebase';
+import { useFormik } from 'formik';
+import { useEffect } from 'react';
 import { useAuthState } from 'react-firebase-hooks/auth';
 import { useNavigate } from 'react-router';
-import styles from './style.module.scss';
-import { useFormik } from 'formik';
-import Button from '@/components/ui/button';
 import useAuth from './hooks/useAuth';
-import { UserLogin } from './api/model';
-
-import { collection, getDocs, query, where } from 'firebase/firestore';
-
-import { db } from '@/features/auth/firebase';
-
-import { useDispatch } from 'react-redux';
+import styles from './style.module.scss';
 
 function Login() {
   const [user, loading, error] = useAuthState(auth);
-  const { login, logout, loggedIn, updateStatusLogin } = useAuth();
+  const {
+    login,
+    register,
+    fetchUserFirebase,
+    readyLogin,
+    loggedIn,
+    userFirebaseInfo
+  } = useAuth();
 
   const navigate = useNavigate();
 
@@ -57,23 +56,21 @@ function Login() {
     }
   });
 
-  const fetchUserName = async () => {
-    if (!user?.uid) return;
-    try {
-      const q = query(collection(db, 'users'), where('uid', '==', user?.uid));
-      const doc = await getDocs(q);
-      const data = doc.docs[0].data();
-      console.log(data);
-    } catch (err) {
-      throw err;
-    }
-  };
+  useEffect(() => {
+    if (loading || !user?.uid) return;
+    fetchUserFirebase(user?.uid);
+  }, [user]);
 
   useEffect(() => {
-    if (loading) return;
-    if (!user) return;
-    fetchUserName();
-  }, [user, loading]);
+    if (!userFirebaseInfo) return;
+    const { name, email, uid } = userFirebaseInfo;
+    register({ username: name, email, password: uid });
+  }, [userFirebaseInfo]);
+
+  useEffect(() => {
+    if (!readyLogin) return;
+    login({ email: userFirebaseInfo.email, password: userFirebaseInfo.uid });
+  }, [readyLogin, userFirebaseInfo]);
 
   return (
     <div className={`${styles['login-wrapper']} theme-dark`}>
@@ -100,7 +97,7 @@ function Login() {
             className={`input-primary ${
               formik.errors.email ? styles['field-error'] : ''
             }`}
-            type='text'
+            type='password'
             id='password'
             onChange={formik.handleChange}
             value={formik.values.password}

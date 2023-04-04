@@ -16,7 +16,11 @@ import {
   userInfo,
   refreshToken,
   updateStatusLogin,
-  reloadPage
+  reloadPage,
+  register,
+  readyLogin,
+  fetchUserFirebase,
+  userFirebaseInfo
 } from '../redux/slice';
 const useAuth = () => {
   const dispatch = useAppDispatch();
@@ -25,6 +29,12 @@ const useAuth = () => {
   const _authToken = useAppSelector(authToken);
   const _userInfo = useAppSelector(userInfo);
   const _reloadPage = useAppSelector(reloadPage);
+  const _readyLogin = useAppSelector(readyLogin);
+  const _useFirebaseInfo = useAppSelector(userFirebaseInfo);
+
+  const _resgister = (payload: any) => {
+    dispatch(register(payload));
+  };
 
   const _refreshToken = () => {
     dispatch(refreshToken({ refreshToken: getRefreshTokenLocalStorage() }));
@@ -43,15 +53,23 @@ const useAuth = () => {
     firebase.logout();
   };
 
+  const _fetchUserFireBase = (payload: any) => {
+    dispatch(fetchUserFirebase(payload));
+  };
+
   return {
     updateStatusLogin: _updateStatusLogin,
     reloadPage: _reloadPage,
     login: _login,
     logout: _logout,
     loggedIn: _loggedIn,
+    readyLogin: _readyLogin,
     authToken: _authToken,
     userInfo: _userInfo,
-    refreshToken: _refreshToken
+    refreshToken: _refreshToken,
+    register: _resgister,
+    fetchUserFirebase: _fetchUserFireBase,
+    userFirebaseInfo: _useFirebaseInfo
   };
 };
 

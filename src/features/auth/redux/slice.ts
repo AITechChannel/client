@@ -15,6 +15,8 @@ interface AuthState {
   isUserLoaded: boolean;
   reloadPage: boolean;
   tokenExpired: boolean;
+  readyLogin: boolean;
+  userFirebaseInfo: any;
 }
 
 const initialState: AuthState = {
@@ -23,7 +25,9 @@ const initialState: AuthState = {
   userInfo: undefined,
   isUserLoaded: false,
   reloadPage: false,
-  tokenExpired: true
+  tokenExpired: true,
+  readyLogin: false,
+  userFirebaseInfo: null
 };
 
 export const authSlice = createSlice({
@@ -32,7 +36,21 @@ export const authSlice = createSlice({
   reducers: {
     login: (state, action) => {},
     register: (state, action) => {},
-    registerSuccess: (state, action) => {},
+    registerSuccess: (state, action) => {
+      state.readyLogin = true;
+      state.userInfo = {
+        ...action.payload
+      };
+    },
+
+    fetchUserFirebase: (state, action) => {},
+    fetchUserFirebaseSuccess: (state, action) => {
+      state.userFirebaseInfo = {
+        ...action.payload,
+        username: action.payload.name
+      };
+    },
+    registerFailed: (state, action) => {},
     updateStatusLogin: (state, action) => {
       state.loggedIn = action.payload;
     },
@@ -40,7 +58,14 @@ export const authSlice = createSlice({
     loginSuccess: (state, action) => {
       state.loggedIn = true;
       state.authToken = action.payload;
-      state.userInfo = action.payload.userInfo;
+      state.userInfo = {
+        ...action.payload.userInfo,
+        firstName: action.payload.userInfo?.username
+          ?.split(' ')
+          .slice(0, 2)
+          .join(' '),
+        lastname: action.payload.userInfo?.username?.split(' ').pop()
+      };
       setTokenLocalStorage(action.payload.token);
       setRefreshTokenLocalStorage(action.payload.refresh_token);
     },
@@ -48,6 +73,7 @@ export const authSlice = createSlice({
     logoutSuccess: (state, action) => {
       removeTokenLocalStorage();
       state.loggedIn = false;
+      window.location.replace('/login');
     },
     refreshToken: (state, action) => {},
     refreshTokenSuccess: (state, action) => {
@@ -67,13 +93,20 @@ export const {
   refreshToken,
   updateStatusLogin,
   registerSuccess,
-  register
+  register,
+  registerFailed,
+  fetchUserFirebase,
+  fetchUserFirebaseSuccess
 } = authSlice.actions;
+
 export const loggedIn = (state: RootState) => state.auth.loggedIn;
 export const authToken = (state: RootState) => state.auth.authToken;
 export const userInfo = (state: RootState) => state.auth.userInfo;
 export const isUserLoaded = (state: RootState) => state.auth.isUserLoaded;
 export const reloadPage = (state: RootState) => state.auth.reloadPage;
 export const tokenExpired = (state: RootState) => state.auth.tokenExpired;
+export const readyLogin = (state: RootState) => state.auth.readyLogin;
+export const userFirebaseInfo = (state: RootState) =>
+  state.auth.userFirebaseInfo;
 
 export default authSlice.reducer;
