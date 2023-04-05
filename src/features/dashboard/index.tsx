@@ -40,14 +40,12 @@ function Home() {
 
   const fetchUserName = async () => {
     if (!user?.uid) return;
-    console.log('🚀 ::: !user?.ui:', user?.uid);
     try {
       const q = query(collection(db, 'users'), where('uid', '==', user?.uid));
       const doc = await getDocs(q);
       const data = doc.docs[0].data();
-      console.log('🚀 ::::: fetchUserName ::::: data', data);
       setName(data.name);
-      console.log(doc.docs[0].data());
+      doc.docs[0].data();
     } catch (err) {
       console.error(err);
       //   alert("An error occured while fetching user data");
@@ -59,13 +57,13 @@ function Home() {
   //   if (!user) return navigate('/login');
 
   //   fetchUserName();
-  //   console.log('dfsdf');
+  //   'dfsdf');
   // }, [user, loading]);
 
   return (
     <MainLayout>
       <p>This is select component</p>
-      {/* <Select items={items} onChange={(e) => console.log(e)} /> */}
+      {/* <Select items={items} onChange={(e) => e)} /> */}
       <Modal
         title='This is title'
         onCancel={() => setShowModal(false)}

@@ -11,7 +11,9 @@ import {
   register,
   registerFailed,
   fetchUserFirebaseSuccess,
-  fetchUserFirebase
+  fetchUserFirebase,
+  getUserInfo,
+  getUserInfoSuccess
 } from './slice';
 
 export function* loginSaga({ payload }: any) {
@@ -27,8 +29,17 @@ export function* fetchUserFirebaseSaga({ payload }: any) {
       request.fetchUserFirebase,
       payload
     );
-    console.log('🚀 ::: response:', response);
     yield put(fetchUserFirebaseSuccess(response));
+  } catch (e: any) {}
+}
+
+export function* getUserInfoSaga({ payload }: any) {
+  try {
+    const response: Record<string, string> = yield call(
+      request.getUserInfo,
+      payload
+    );
+    yield put(getUserInfoSuccess(response));
   } catch (e: any) {}
 }
 
@@ -70,7 +81,8 @@ function* AuthSaga() {
     takeLatest(register.type, registerSaga),
     takeLatest(logout.type, logoutSaga),
     takeLatest(refreshToken.type, refreshTokenSaga),
-    takeLatest(fetchUserFirebase.type, fetchUserFirebaseSaga)
+    takeLatest(fetchUserFirebase.type, fetchUserFirebaseSaga),
+    takeLatest(getUserInfo.type, getUserInfoSaga)
   ]);
 }
 

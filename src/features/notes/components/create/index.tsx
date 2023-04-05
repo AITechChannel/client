@@ -50,7 +50,6 @@ function Create() {
   useEffect(() => {
     if (!detailNote) return;
     if (action.name === ACTION.Edit) {
-      console.log('set');
       setInitialValues(detailNote);
       setDataEditor(detailNote.content);
     }
@@ -77,7 +76,9 @@ function Create() {
         <div className={styles.editor}>
           <Editor onChange={handleChangeEditor} data={dataEditor} />
         </div>
-        <Button htmltype='submit'>Create note</Button>
+        <Button style={{ float: 'right' }} htmltype='submit'>
+          Create note
+        </Button>
       </form>
     </Modal>
   );

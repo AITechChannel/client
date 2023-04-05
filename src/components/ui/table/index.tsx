@@ -50,7 +50,6 @@ function Table(props: PropsType) {
               {item.map((_item: any, _index: number) => (
                 <td
                   style={{ width: _item.width, textAlign: _item.align }}
-                  onClick={() => console.log(_item)}
                   key={`${item.key}_${_index}`}
                 >
                   {_item.render ? _item.render(_item) : _item.value}

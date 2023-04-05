@@ -20,7 +20,8 @@ import {
   register,
   readyLogin,
   fetchUserFirebase,
-  userFirebaseInfo
+  userFirebaseInfo,
+  getUserInfo
 } from '../redux/slice';
 const useAuth = () => {
   const dispatch = useAppDispatch();
@@ -31,7 +32,9 @@ const useAuth = () => {
   const _reloadPage = useAppSelector(reloadPage);
   const _readyLogin = useAppSelector(readyLogin);
   const _useFirebaseInfo = useAppSelector(userFirebaseInfo);
-
+  const _getUserInfo = (id: number | string) => {
+    dispatch(getUserInfo(id));
+  };
   const _resgister = (payload: any) => {
     dispatch(register(payload));
   };
@@ -58,6 +61,7 @@ const useAuth = () => {
   };
 
   return {
+    getUserInfo: _getUserInfo,
     updateStatusLogin: _updateStatusLogin,
     reloadPage: _reloadPage,
     login: _login,

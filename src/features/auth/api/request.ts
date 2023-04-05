@@ -47,3 +47,11 @@ export const refreshToken = async (payload: { refreshToken: string }) => {
     throw error;
   }
 };
+
+export const getUserInfo = async (id: string | number) => {
+  try {
+    return await RequestApi.get(pathURL.authenticate.getUserInfo + '/' + id);
+  } catch (error) {
+    throw error;
+  }
+};

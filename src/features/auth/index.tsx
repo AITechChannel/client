@@ -1,5 +1,6 @@
 import Button from '@/components/ui/button';
 import { auth, signInWithGoogle } from '@/features/auth/firebase';
+import { EMAIL_REGEX } from '@/utils/constant';
 import { useFormik } from 'formik';
 import { useEffect } from 'react';
 import { useAuthState } from 'react-firebase-hooks/auth';
@@ -30,9 +31,7 @@ function Login() {
 
     if (!values.email) {
       errors.email = 'Required';
-    } else if (
-      !/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i.test(values.email)
-    ) {
+    } else if (EMAIL_REGEX.test(values.email)) {
       errors.email = 'Invalid email address';
     }
 

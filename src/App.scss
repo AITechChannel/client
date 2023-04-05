@@ -16,7 +16,12 @@
   background: linear-gradient(#0b1121, rgb(30, 41, 59));
   color: white;
   input {
-    background-color: #54638d;
+    color: white;
+    background-color: var(--secondary-color);
+  }
+
+  .ck-content {
+    background-color: var(--secondary-color);
   }
 }
 

@@ -35,6 +35,14 @@ export const authSlice = createSlice({
   initialState,
   reducers: {
     login: (state, action) => {},
+    getUserInfo: (state, action) => {},
+    getUserInfoSuccess: (state, action) => {
+      state.userInfo = {
+        ...action.payload,
+        firstName: action.payload?.username?.split(' ').slice(0, 2).join(' '),
+        lastname: action.payload?.username?.split(' ').pop()
+      };
+    },
     register: (state, action) => {},
     registerSuccess: (state, action) => {
       state.readyLogin = true;
@@ -58,14 +66,6 @@ export const authSlice = createSlice({
     loginSuccess: (state, action) => {
       state.loggedIn = true;
       state.authToken = action.payload;
-      state.userInfo = {
-        ...action.payload.userInfo,
-        firstName: action.payload.userInfo?.username
-          ?.split(' ')
-          .slice(0, 2)
-          .join(' '),
-        lastname: action.payload.userInfo?.username?.split(' ').pop()
-      };
       setTokenLocalStorage(action.payload.token);
       setRefreshTokenLocalStorage(action.payload.refresh_token);
     },
@@ -96,7 +96,9 @@ export const {
   register,
   registerFailed,
   fetchUserFirebase,
-  fetchUserFirebaseSuccess
+  fetchUserFirebaseSuccess,
+  getUserInfo,
+  getUserInfoSuccess
 } = authSlice.actions;
 
 export const loggedIn = (state: RootState) => state.auth.loggedIn;

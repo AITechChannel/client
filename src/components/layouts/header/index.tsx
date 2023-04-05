@@ -16,10 +16,12 @@ import { useNavigate } from 'react-router';
 import useAuth from '@/features/auth/hooks/useAuth';
 import { getTokenLocalStorage } from '@/utils/helpers';
 
+import jwt_decode from 'jwt-decode';
+
 function Header() {
   const dispatch = useAppDispatch();
   const themeValue = useAppSelector(theme);
-  const { logout, userInfo } = useAuth();
+  const { logout, userInfo, getUserInfo } = useAuth();
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -27,6 +29,13 @@ function Header() {
       navigate('/login');
       return;
     }
+
+    const { id } = jwt_decode(getTokenLocalStorage() || '') as Record<
+      string,
+      string
+    >;
+
+    getUserInfo(id);
   }, []);
 
   const onChangeSwitch = () => {
