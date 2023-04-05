@@ -1,15 +1,15 @@
-import React, { useEffect, useRef, useState } from "react";
-import { createPortal } from "react-dom";
-import IconChecked from "../icons/IconChecked";
-import IconClose from "../icons/IconClose";
-import Modal from "../modal";
-import { Item, PropsType } from "./interface";
-import styles from "./style.module.scss";
+import { useEffect, useRef, useState } from 'react';
+import { createPortal } from 'react-dom';
+import IconChecked from '../icons/IconChecked';
+import { Item, PropsType } from './interface';
+import styles from './style.module.scss';
 
 function Select(props: PropsType) {
-  const { items, onChange } = props;
-  const [valueInput, setValueInput] = useState<any>("");
-  const [itemslected, setItemSelected] = useState<Item[] | []>([]);
+  const { onChange, placeholder = 'Please select' } = props;
+
+  const [items, setItems] = useState(props.items);
+  const [valueInput, setValueInput] = useState<any>('');
+  const [itemslected, setItemSelected] = useState<Item>();
   const [showOptions, setShowOptions] = useState<Boolean>(false);
   const [coordinates, setCoordinates] = useState<any>();
   const selectEl = useRef<HTMLInputElement>(null);
@@ -25,23 +25,11 @@ function Select(props: PropsType) {
       y: selectEl.current.offsetTop + selectEl.current.offsetHeight
     });
     e?.stopPropagation();
-    setShowOptions(true);
-    const indexItem = itemslected.findIndex((e) => e.id === item.id);
-    if (indexItem === -1) {
-      setItemSelected([...itemslected, item]);
-      return;
-    }
-    setItemSelected(() => {
-      const _items = [...itemslected];
-      _items.splice(indexItem, 1);
-      return _items;
-    });
+    setShowOptions(false);
+    inputEl.current.blur();
+    setItemSelected(item);
+    setValueInput('');
   };
-
-  const isSelected = (items: Item[], item: Item) => {
-    return items.some((e) => e.id === item.id);
-  };
-
   const handleClickSelect = (e: any) => {
     if (!selectEl.current) return;
     if (!inputEl.current) return;
@@ -54,15 +42,23 @@ function Select(props: PropsType) {
     });
   };
 
+  const handleChangeInput = (e: any) => {
+    setValueInput(e.target.value);
+    const itemsFounded = props.items.filter((item) =>
+      item.label.includes(e.target.value.trim())
+    );
+    setItems([...itemsFounded]);
+  };
+
   useEffect(() => {
-    window.addEventListener("click", (e) => {
-      if (e.target !== dropDownEl.current && e.target !== selectEl.current) {
+    window.addEventListener('click', (e) => {
+      if (e.target !== dropDownEl.current || e.target !== inputEl.current) {
         setShowOptions(false);
       }
     });
 
     return () => {
-      window.removeEventListener("click", () => {});
+      window.removeEventListener('click', () => {});
     };
   }, []);
 
@@ -73,54 +69,69 @@ function Select(props: PropsType) {
       y: selectEl.current.offsetTop + selectEl.current.offsetHeight + 8
     });
 
-    onChange(itemslected);
+    if (itemslected && onChange) {
+      onChange(itemslected);
+    }
   }, [itemslected]);
 
   return (
-    <div className={styles["select-wrapper"]}>
+    <div className={styles['select-wrapper']}>
       <div
-        className={styles["select-input"]}
+        className={styles['select-input']}
         ref={selectEl}
         onClick={(e: any) => handleClickSelect(e)}
       >
-        <div className={styles.tags}>
-          {itemslected.map((item, index) => (
-            <div key={item.id} className={styles.tag}>
-              <span>{item.label}</span>
-              <span onClick={() => handleChange(item)}>
-                <IconClose />
-              </span>
+        <div className={styles.input}>
+          <input
+            style={{ width: 20 + valueInput.length * 8 || 20 }}
+            ref={inputEl}
+            value={valueInput}
+            onChange={handleChangeInput}
+          />
+          <div
+            style={{ opacity: valueInput.length ? 0 : 'unset' }}
+            className={styles.text}
+          >
+            {itemslected?.label}
+
+            <div className={styles.placeholder}>
+              {!itemslected?.label && placeholder}
             </div>
-          ))}
-          <input ref={inputEl} value={valueInput} />
+          </div>
         </div>
       </div>
 
       {showOptions &&
         createPortal(
-          <div
-            style={{
-              top: coordinates.y,
-              left: coordinates.x
-            }}
-            className={styles["drop-down-wrapper"]}
-            ref={dropDownEl}
-          >
-            {items.map((item, index) => (
-              <div
-                key={item.id}
-                className={`${styles.item} ${
-                  isSelected(itemslected, item) ? styles.active : ""
-                }`}
-                onClick={(e) => handleChange(item, e)}
-              >
-                <span className={styles.label}>{item.label}</span>
-                <span className={styles.icon}>
-                  <IconChecked />
-                </span>
-              </div>
-            ))}
-          </div>,
+          <>
+            <div
+              className={styles.overlay}
+              onClick={() => setShowOptions(false)}
+            ></div>
+            <div
+              style={{
+                top: coordinates.y,
+                left: coordinates.x
+              }}
+              className={styles['drop-down-wrapper']}
+              ref={dropDownEl}
+            >
+              {items.map((item, index) => (
+                <div
+                  key={item.id}
+                  className={`${styles.item} ${
+                    itemslected?.id === item.id ? styles.active : ''
+                  }`}
+                  onClick={(e) => handleChange(item, e)}
+                >
+                  <span className={styles.label}>{item.label}</span>
+                  <span className={styles.icon}>
+                    <IconChecked />
+                  </span>
+                </div>
+              ))}
+            </div>
+          </>,
           document.body
         )}
     </div>

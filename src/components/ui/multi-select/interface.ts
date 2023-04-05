@@ -5,6 +5,5 @@ export interface Item {
 
 export interface PropsType {
   items: Item[];
-  onChange?: (e: Item) => void;
-  placeholder?: string;
+  onChange: (e: Item[]) => void;
 }

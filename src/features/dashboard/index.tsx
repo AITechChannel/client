@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import MainLayout from '../../components/layouts/main-layout';
 import Modal from '../../components/ui/modal';
-import Select from '../../components/ui/select';
+import Select from '../../components/ui/multi-select';
 import { useAppDispatch, useAppSelector } from '../../store/store';
 import { dashboardSlice, selectCount } from './redux/slice';
 import { theme, toggleTheme } from '../../store/common/themeSlice';

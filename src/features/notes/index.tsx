@@ -9,6 +9,8 @@ import { useEffect } from 'react';
 import Create from './components/create';
 import useNote from './hooks/useNote';
 import Input from '@/components/ui/input';
+import Select from '@/components/ui/select';
+import { Item } from '@/components/ui/select/interface';
 
 function Notes() {
   const dispatch = useAppDispatch();
@@ -17,6 +19,17 @@ function Notes() {
   useEffect(() => {
     fetchNoteList();
   }, [dispatch]);
+
+  const items: Item[] = [
+    {
+      id: 1,
+      label: 'code'
+    },
+    {
+      id: 2,
+      label: 'english'
+    }
+  ];
 
   return (
     <MainLayout>

@@ -6,6 +6,7 @@ import useNote from '../../hooks/useNote';
 import { useFormik } from 'formik';
 import styles from './style.module.scss';
 import { ACTION } from '../../utils/constant';
+import Select from '@/components/ui/select';
 
 function Create() {
   const {
@@ -47,6 +48,17 @@ function Create() {
     }
   });
 
+  const items = [
+    {
+      id: 1,
+      label: 'code'
+    },
+    {
+      id: 2,
+      label: 'english'
+    }
+  ];
+
   useEffect(() => {
     if (!detailNote) return;
     if (action.name === ACTION.Edit) {
@@ -72,6 +84,11 @@ function Create() {
             value={formik.values.title}
             placeholder='Title input'
           />
+        </label>
+
+        <label className={styles.title} htmlFor='Category'>
+          <span>Category</span>
+          <Select items={items} />
         </label>
         <div className={styles.editor}>
           <Editor onChange={handleChangeEditor} data={dataEditor} />

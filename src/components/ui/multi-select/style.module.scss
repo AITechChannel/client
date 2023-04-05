@@ -1,5 +1,5 @@
 .drop-down-wrapper {
-  background: rgb(235, 235, 235);
+  background: rgb(209, 194, 194);
   border-radius: 10px;
   display: inline-block;
   position: absolute;
@@ -25,7 +25,7 @@
     }
     &:hover {
       cursor: pointer;
-      background-color: rgb(214, 214, 214);
+      background-color: blue;
     }
   }
 
@@ -33,54 +33,43 @@
     .icon {
       opacity: 1;
     }
-    background-color: rgb(214, 214, 214);
+    background-color: blue;
   }
 }
 
 .select-wrapper {
   width: 300px;
-  height: 40px;
+  min-height: 42px;
 }
 
 .select-input {
+  background-color: white;
   display: flex;
   border-radius: 10px;
   height: 100%;
-  border: 1px solid white;
-  position: relative;
-  padding: 0 10px;
-  input {
-    border: none;
-    background-color: transparent;
-    &:focus {
-      outline: none;
-    }
-  }
-  .input {
+  .tags {
+    width: 100%;
     display: flex;
-
-    div {
+    flex-wrap: wrap;
+    gap: 4px;
+    padding: 6px;
+    .tag {
+      background-color: #333;
+      border-radius: 6px;
+      padding: 0 6px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      //   span {
+      //     height: 30px;
+      //   }
+    }
+    input {
       flex: 1;
+      border: none;
+      &:focus {
+        outline: none;
+      }
     }
   }
-  .text {
-    position: absolute;
-    top: 0;
-    left: 12px;
-    right: 0;
-    bottom: 0;
-    line-height: 40px;
-  }
-
-  .placeholder {
-    color: rgb(165, 165, 165);
-  }
-}
-
-.overlay {
-  position: fixed;
-  top: 0;
-  bottom: 0;
-  left: 0;
-  right: 0;
 }
