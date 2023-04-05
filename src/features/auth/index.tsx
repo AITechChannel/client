@@ -42,8 +42,8 @@ function Login() {
   };
 
   const initialValues = {
-    email: 'dta.bk13@gmail.com',
-    password: '123'
+    email: '',
+    password: ''
   };
 
   const formik = useFormik({
