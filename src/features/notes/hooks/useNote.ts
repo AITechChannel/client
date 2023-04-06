@@ -22,7 +22,10 @@ import {
   params,
   loading,
   fetchDetailNote,
-  action
+  action,
+  createCategory,
+  fetchCategoryList,
+  categoryList
 } from '../redux/slice';
 import { ParamsGeNoteList } from '../utils/interface';
 import { Note } from '../api/model';
@@ -36,8 +39,16 @@ const useNote = () => {
   const _total_page = useAppSelector(total_page);
   const _loading = useAppSelector(loading);
   const _action = useAppSelector(action);
-
+  const _categoryList = useAppSelector(categoryList);
   const _detailNote = useAppSelector(detailNote);
+
+  const _fetchCategoryList = (params: any) => {
+    dispatch(fetchCategoryList(params));
+  };
+
+  const _createCategory = (payload: { name: string }) => {
+    dispatch(createCategory(payload));
+  };
 
   const _toggleModalAddNote = () => {
     dispatch(toggleModalAddNote());
@@ -104,7 +115,10 @@ const useNote = () => {
     fetchNoteListMore: _fetchNoteListMore,
     detailNote: _detailNote,
     action: _action,
-    updateNote: _updateNote
+    updateNote: _updateNote,
+    createCategory: _createCategory,
+    fetchCategoryList: _fetchCategoryList,
+    categoryList: _categoryList
   };
 };
 

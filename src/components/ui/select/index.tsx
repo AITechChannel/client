@@ -5,12 +5,19 @@ import { Item, PropsType } from './interface';
 import styles from './style.module.scss';
 
 function Select(props: PropsType) {
-  const { onChange, placeholder = 'Please select' } = props;
+  const {
+    onChange,
+    placeholder = 'Please select',
+    itemChildren,
+    wrapperClassName,
+    iconItem
+  } = props;
 
   const [items, setItems] = useState(props.items);
   const [valueInput, setValueInput] = useState<any>('');
   const [itemslected, setItemSelected] = useState<Item>();
   const [showOptions, setShowOptions] = useState<Boolean>(false);
+
   const [coordinates, setCoordinates] = useState<any>();
   const selectEl = useRef<HTMLInputElement>(null);
   const dropDownEl = useRef<HTMLDivElement>(null);
@@ -74,6 +81,10 @@ function Select(props: PropsType) {
     }
   }, [itemslected]);
 
+  useEffect(() => {
+    setItems(props.items);
+  }, [props.items]);
+
   return (
     <div className={styles['select-wrapper']}>
       <div
@@ -111,9 +122,10 @@ function Select(props: PropsType) {
             <div
               style={{
                 top: coordinates.y,
-                left: coordinates.x
+                left: coordinates.x,
+                width: selectEl.current?.offsetWidth
               }}
-              className={styles['drop-down-wrapper']}
+              className={`${styles['drop-down-wrapper']} ${wrapperClassName}`}
               ref={dropDownEl}
             >
               {items.map((item, index) => (
@@ -124,12 +136,21 @@ function Select(props: PropsType) {
                   }`}
                   onClick={(e) => handleChange(item, e)}
                 >
-                  <span className={styles.label}>{item.label}</span>
-                  <span className={styles.icon}>
-                    <IconChecked />
-                  </span>
+                  {!item.form ? (
+                    <div className={styles.label}>{item.label}</div>
+                  ) : (
+                    item.form
+                  )}
+                  <div className={styles['action-wrapper']}>
+                    {item.icon}
+                    <span className={styles.icon}>
+                      <IconChecked />
+                    </span>
+                  </div>
                 </div>
               ))}
+
+              <div>{itemChildren}</div>
             </div>
           </>,
           document.body

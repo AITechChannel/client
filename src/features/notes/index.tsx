@@ -20,17 +20,6 @@ function Notes() {
     fetchNoteList();
   }, [dispatch]);
 
-  const items: Item[] = [
-    {
-      id: 1,
-      label: 'code'
-    },
-    {
-      id: 2,
-      label: 'english'
-    }
-  ];
-
   return (
     <MainLayout>
       {/* <Button type='primary' onClick={toggleModalAddNote}>

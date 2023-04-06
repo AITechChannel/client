@@ -18,6 +18,7 @@ export interface InitNoteSate {
     id: number | null;
   };
   params: any;
+  categoryList: any[];
 }
 
 const initialState: InitNoteSate = {
@@ -33,7 +34,8 @@ const initialState: InitNoteSate = {
     name: null,
     id: null
   },
-  params: DEFAULT_PARAMS
+  params: DEFAULT_PARAMS,
+  categoryList: []
 };
 
 export const myNoteSlice = createSlice({
@@ -90,7 +92,17 @@ export const myNoteSlice = createSlice({
     deleteNote: (state, action) => {},
     deleteNoteSuccess: (state, action) => {},
     updateNote: (state, action) => {},
-    updateNoteSuccess: (state, action) => {}
+    updateNoteSuccess: (state, action) => {},
+    fetchCategoryList: (state, action) => {},
+    createCategory: (state, action) => {},
+    fetchCategoryListSuccess: (state, action) => {
+      state.categoryList = action.payload?.data?.map((item: any) => ({
+        id: item._id,
+        label: item.name,
+        editable: false
+      }));
+    },
+    createCategorySuccess: (state, action) => {}
   }
 });
 
@@ -108,7 +120,12 @@ export const {
   fetchNoteListMoreSuccess,
   fetchDetailNoteSuccess,
   fetchDetailNote,
-  updateNote
+  updateNote,
+  createCategory,
+  createCategorySuccess,
+  deleteNoteSuccess,
+  fetchCategoryList,
+  fetchCategoryListSuccess
 } = myNoteSlice.actions;
 
 export const noteList = (state: RootState) => state.myNote.noteList;
@@ -119,5 +136,6 @@ export const current_page = (state: RootState) => state.myNote.current_page;
 export const loading = (state: RootState) => state.myNote.loading;
 export const detailNote = (state: RootState) => state.myNote.detailNote;
 export const action = (state: RootState) => state.myNote.action;
+export const categoryList = (state: RootState) => state.myNote.categoryList;
 
 export default myNoteSlice.reducer;

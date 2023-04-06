@@ -7,6 +7,8 @@ import { useFormik } from 'formik';
 import styles from './style.module.scss';
 import { ACTION } from '../../utils/constant';
 import Select from '@/components/ui/select';
+import IconEdit from '@/components/ui/icons/IconEdit';
+import IconDelete from '@/components/ui/icons/IconDelete';
 
 function Create() {
   const {
@@ -15,9 +17,13 @@ function Create() {
     toggleModalAddNote,
     createNote,
     detailNote,
-    updateNote
+    updateNote,
+    createCategory,
+    fetchCategoryList,
+    categoryList
   } = useNote();
   const [dataEditor, setDataEditor] = useState<any>('');
+  const [categoryName, setCategoryName] = useState<any>('');
   const [initialValues, setInitialValues] = useState<any>({
     title: '',
     content: ''
@@ -48,16 +54,10 @@ function Create() {
     }
   });
 
-  const items = [
-    {
-      id: 1,
-      label: 'code'
-    },
-    {
-      id: 2,
-      label: 'english'
-    }
-  ];
+  const handleCategorySubmit = () => {
+    createCategory({ name: categoryName });
+    setCategoryName('');
+  };
 
   useEffect(() => {
     if (!detailNote) return;
@@ -66,6 +66,74 @@ function Create() {
       setDataEditor(detailNote.content);
     }
   }, [action, detailNote]);
+
+  const categoryListIcon = categoryList.map((category) => ({
+    ...category,
+    contentEdit: category.label,
+    icon: (
+      <div
+        onClick={(e) => e.stopPropagation()}
+        className={styles['action-dropdown-wrapper']}
+      >
+        <span onClick={() => handleActionCategory(category, 'EDIT_CATEGORY')}>
+          <IconEdit />
+        </span>
+        <span onClick={() => handleActionCategory(category, 'DELETE_CATEGORY')}>
+          <IconDelete />
+        </span>
+      </div>
+    )
+  }));
+
+  const [categoryListRender, setcategoryListRender] =
+    useState(categoryListIcon);
+  console.log('🚀 ::: categoryListRender:', categoryListRender);
+
+  const [valueEdit, setValueEdit] = useState('');
+
+  const handleActionCategory = (category: any, aciton: string) => {
+    if ((aciton = 'EDIT_CATEGORY')) {
+      setcategoryListRender((prev) => {
+        return prev.map((item) => {
+          if (category.id !== item.id) return { ...item, form: null };
+          if (item.form) return { ...item, form: null };
+
+          return {
+            ...item,
+            form: (
+              <input
+                className='input-primary'
+                // defaultValue={item.label}
+                value={item.contentEdit}
+                onClick={(e) => e.stopPropagation()}
+                onChange={(e) => handleOnChangeEdit(category, e)}
+              />
+            )
+          };
+        });
+      });
+    }
+  };
+
+  const handleOnChangeEdit = (category: any, e: any) => {
+    setcategoryListRender((prev) => {
+      return prev.map((item) => {
+        if (!item.form) return item;
+        return {
+          ...item,
+          contentEdit: e.target.value
+        };
+      });
+    });
+  };
+
+  useEffect(() => {
+    fetchCategoryList({});
+  }, []);
+
+  useEffect(() => {
+    setcategoryListRender(categoryListIcon);
+  }, [categoryList]);
 
   return (
     <Modal
@@ -88,8 +156,23 @@ function Create() {
 
         <label className={styles.title} htmlFor='Category'>
           <span>Category</span>
-          <Select items={items} />
+          <Select
+            items={categoryListRender}
+            itemChildren={
+              <div className={styles['add-category-wrapper']}>
+                <input
+                  type='text'
+                  className='input-primary'
+                  placeholder='Category name'
+                  value={categoryName}
+                  onChange={(e) => setCategoryName(e.target.value)}
+                />
+                <Button onClick={handleCategorySubmit}>Add Category</Button>
+              </div>
+            }
+          />
         </label>
+
         <div className={styles.editor}>
           <Editor onChange={handleChangeEditor} data={dataEditor} />
         </div>

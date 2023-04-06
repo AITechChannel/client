@@ -7,3 +7,8 @@ export interface Note {
 export interface Response<T> {
   data: T[];
 }
+
+export interface Category {
+  id: string;
+  name: string;
+}

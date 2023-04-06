@@ -37,3 +37,19 @@ export const updateNote = async (id: number, payload: Note) => {
     throw error;
   }
 };
+
+export const createCategory = async (payload: any) => {
+  try {
+    return await RequestApi.post(pathURL.category.list, payload);
+  } catch (error) {
+    throw error;
+  }
+};
+
+export const getCategoryList = async (payload: any) => {
+  try {
+    return await RequestApi.get(pathURL.category.list, payload);
+  } catch (error) {
+    throw error;
+  }
+};

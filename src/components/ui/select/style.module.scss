@@ -35,10 +35,15 @@
     }
     background-color: rgb(214, 214, 214);
   }
+
+  .action-wrapper {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
 }
 
 .select-wrapper {
-  width: 300px;
   height: 40px;
 }
 
