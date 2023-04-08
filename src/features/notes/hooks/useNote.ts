@@ -25,7 +25,8 @@ import {
   action,
   createCategory,
   fetchCategoryList,
-  categoryList
+  categoryList,
+  updateCategory
 } from '../redux/slice';
 import { ParamsGeNoteList } from '../utils/interface';
 import { Note } from '../api/model';
@@ -41,6 +42,10 @@ const useNote = () => {
   const _action = useAppSelector(action);
   const _categoryList = useAppSelector(categoryList);
   const _detailNote = useAppSelector(detailNote);
+
+  const _updateCategory = (payload: any) => {
+    dispatch(updateCategory(payload));
+  };
 
   const _fetchCategoryList = (params: any) => {
     dispatch(fetchCategoryList(params));
@@ -105,6 +110,7 @@ const useNote = () => {
   };
 
   return {
+    updateCategory: _updateCategory,
     handleActions: _handleActions,
     listNote: _listNote,
     params: _params,

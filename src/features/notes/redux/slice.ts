@@ -102,7 +102,9 @@ export const myNoteSlice = createSlice({
         editable: false
       }));
     },
-    createCategorySuccess: (state, action) => {}
+    createCategorySuccess: (state, action) => {},
+    updateCategory: (state, action) => {},
+    updateCategorySuccess: (state, action) => {}
   }
 });
 
@@ -125,7 +127,9 @@ export const {
   createCategorySuccess,
   deleteNoteSuccess,
   fetchCategoryList,
-  fetchCategoryListSuccess
+  fetchCategoryListSuccess,
+  updateCategory,
+  updateCategorySuccess
 } = myNoteSlice.actions;
 
 export const noteList = (state: RootState) => state.myNote.noteList;

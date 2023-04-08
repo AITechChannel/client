@@ -15,7 +15,8 @@ import {
   updateNoteSuccess,
   createCategory,
   fetchCategoryList,
-  fetchCategoryListSuccess
+  fetchCategoryListSuccess,
+  updateCategory
 } from './slice';
 
 export function* updateNoteSaga({ payload }: any) {
@@ -100,6 +101,20 @@ export function* createCategorySaga({ payload }: any) {
   } catch (e) {}
 }
 
+export function* updateCategorySaga({ payload }: any) {
+  const { _id } = payload;
+  console.log('🚀 ::: _id:', _id);
+  try {
+    const response: Record<string, string> = yield call(
+      request.updateCategory,
+      payload.id,
+      payload
+    );
+    const state: Record<string, any> = yield select();
+    yield put(fetchCategoryList({}));
+  } catch (e) {}
+}
+
 export function* fetchCategoryListSaga({ payload }: any) {
   try {
     const response: Record<string, string> = yield call(
@@ -120,7 +135,8 @@ function* NoteSaga() {
     takeLatest(deleteNote.type, deleteNoteSaga),
     takeLatest(updateNote.type, updateNoteSaga),
     takeLatest(createCategory.type, createCategorySaga),
-    takeLatest(fetchCategoryList.type, fetchCategoryListSaga)
+    takeLatest(fetchCategoryList.type, fetchCategoryListSaga),
+    takeLatest(updateCategory.type, updateCategorySaga)
   ]);
 }
 

@@ -1,7 +1,7 @@
 import Button from '@/components/ui/button';
 import Editor from '@/components/ui/editor';
 import Modal from '@/components/ui/modal';
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import useNote from '../../hooks/useNote';
 import { useFormik } from 'formik';
 import styles from './style.module.scss';
@@ -20,7 +20,8 @@ function Create() {
     updateNote,
     createCategory,
     fetchCategoryList,
-    categoryList
+    categoryList,
+    updateCategory
   } = useNote();
   const [dataEditor, setDataEditor] = useState<any>('');
   const [categoryName, setCategoryName] = useState<any>('');
@@ -67,73 +68,110 @@ function Create() {
     }
   }, [action, detailNote]);
 
-  const categoryListIcon = categoryList.map((category) => ({
-    ...category,
-    contentEdit: category.label,
-    icon: (
-      <div
-        onClick={(e) => e.stopPropagation()}
-        className={styles['action-dropdown-wrapper']}
-      >
-        <span onClick={() => handleActionCategory(category, 'EDIT_CATEGORY')}>
-          <IconEdit />
-        </span>
-        <span onClick={() => handleActionCategory(category, 'DELETE_CATEGORY')}>
-          <IconDelete />
-        </span>
-      </div>
-    )
-  }));
+  const inputEl = useRef<HTMLInputElement>(null);
 
-  const [categoryListRender, setcategoryListRender] =
-    useState(categoryListIcon);
+  const categoryListRenderInit = categoryList.map((category) => {
+    console.log(category);
+    return {
+      ...category,
+      contentEdit: category.label,
+      icon: (
+        <div
+          onClick={(e) => e.stopPropagation()}
+          className={styles['action-dropdown-wrapper']}
+        >
+          <input
+            id={category.id}
+            ref={inputEl}
+            className='input-primary'
+            value={category.contenEdit}
+            onClick={(e) => e.stopPropagation()}
+            onChange={(e) => handleInputCategory(category, e)}
+          />
+          <span
+            onClick={() => handleActionCategory('EDIT_CATEGORY', category.id)}
+          >
+            <IconEdit />
+          </span>
+          <span onClick={() => {}}>
+            <IconDelete />
+          </span>
+          <Button onClick={() => handleUpdateCategory(category.id)}>
+            Save
+          </Button>
+        </div>
+      )
+    };
+  });
+
+  const [categoryListRender, setCategoryListRender] = useState<any>(
+    categoryListRenderInit
+  );
   console.log('🚀 ::: categoryListRender:', categoryListRender);
 
-  const [valueEdit, setValueEdit] = useState('');
-
-  const handleActionCategory = (category: any, aciton: string) => {
-    if ((aciton = 'EDIT_CATEGORY')) {
-      setcategoryListRender((prev) => {
-        return prev.map((item) => {
-          if (category.id !== item.id) return { ...item, form: null };
-          if (item.form) return { ...item, form: null };
-
-          return {
-            ...item,
-            form: (
-              <input
-                className='input-primary'
-                // defaultValue={item.label}
-                value={item.contentEdit}
-                onClick={(e) => e.stopPropagation()}
-                onChange={(e) => handleOnChangeEdit(category, e)}
-              />
-            )
-          };
-        });
-      });
-    }
+  const handleUpdateCategory = (id: string) => {
+    updateCategory({ name: inputEl.current?.value, id });
   };
 
-  const handleOnChangeEdit = (category: any, e: any) => {
-    setcategoryListRender((prev) => {
-      return prev.map((item) => {
-        if (!item.form) return item;
-        return {
-          ...item,
-          contentEdit: e.target.value
-        };
+  const handleActionCategory = (action: any, id: string) => {
+    // setCategoryListRender((prev: any) => {
+    //   return prev.map((item: any) => {
+    //     if (item.id !== id) return { ...item, showInput: false };
+    //     return { ...item, showInput: true };
+    //   });
+    // });
+  };
+  const handleInputCategory = (category: any, e: any) => {
+    setCategoryListRender((prev: any) => {
+      return prev.map((item: any) => {
+        if (item.id !== category.id) return { ...item, showInput: false };
+        return { ...item, showInput: true, contentEdit: e.target.value };
       });
     });
   };
 
   useEffect(() => {
-    fetchCategoryList({});
-  }, []);
+    setCategoryListRender(categoryListRenderInit);
+  }, [categoryList]);
+
+  // const handleActionCategory = (category: any, aciton: string) => {
+  //   if ((aciton = 'EDIT_CATEGORY')) {
+  //     setcategoryListRender((prev) => {
+  //       return prev.map((item) => {
+  //         if (category.id !== item.id) return { ...item, form: null };
+  //         if (item.form) return { ...item, form: null };
+
+  //         return {
+  //           ...item,
+  //           form: (
+  //             <input
+  //               id={item.id}
+  //               ref={inputEditEl}
+  //               className='input-primary'
+  //               defaultValue={item.label}
+  //               onClick={(e) => e.stopPropagation()}
+  //               onChange={(e) => handleOnChangeEdit(category, e)}
+  //             />
+  //           )
+  //         };
+  //       });
+  //     });
+  //   }
+  // };
+
+  // const handleSubmitUpdateCategory = (id: string) => {
+  //   updateCategory({ name: valueEdit, id });
+  // };
+
+  // const handleOnChangeEdit = (category: any, e: any) => {
+  //   if (!inputEditEl?.current) return;
+  //   inputEditEl.current.value = e.target.value;
+  //   setValueEdit(e.target.value);
+  // };
 
   useEffect(() => {
-    setcategoryListRender(categoryListIcon);
-  }, [categoryList]);
+    fetchCategoryList({});
+  }, []);
 
   return (
     <Modal

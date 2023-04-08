@@ -46,6 +46,13 @@ export const createCategory = async (payload: any) => {
   }
 };
 
+export const updateCategory = async (id: string, payload: any) => {
+  try {
+    return await RequestApi.put(pathURL.category.list + '/' + id, payload);
+  } catch (error) {
+    throw error;
+  }
+};
 export const getCategoryList = async (payload: any) => {
   try {
     return await RequestApi.get(pathURL.category.list, payload);
